@@ -1,0 +1,1065 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Geometric Explorer: Keliling & Luas Bangun Datar</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght=500;700&family=Plus+Jakarta+Sans:wght=400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- KaTeX CSS & JS for beautiful math rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMath()"></script>
+
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #f5f3ff;
+            background-image: radial-gradient(#ddd6fe 1.5px, transparent 1.5px);
+            background-size: 24px 24px;
+        }
+        .heading-font {
+            font-family: 'Space Grotesk', sans-serif;
+        }
+        .slide {
+            display: none;
+        }
+        .slide.active {
+            display: flex;
+            animation: slideIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(16px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        #scratchCanvas {
+            cursor: crosshair;
+            touch-action: none;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between text-slate-800">
+
+    <!-- Header Navigation -->
+    <header class="w-full bg-white border-b-4 border-violet-200 px-4 md:px-8 py-3.5 flex flex-wrap justify-between items-center gap-4 shadow-sm sticky top-0 z-40">
+        <div class="flex items-center gap-3">
+            <div class="w-11 h-11 bg-violet-100 rounded-2xl flex items-center justify-center text-2xl animate-pulse">
+                📐
+            </div>
+            <div>
+                <h1 class="heading-font text-base md:text-lg text-violet-700 font-extrabold tracking-wide">Geometric Explorer</h1>
+                <p class="text-[10px] text-slate-400 font-bold tracking-wider uppercase">Kurikulum Merdeka • Kelas VII SMP</p>
+            </div>
+        </div>
+        
+        <!-- Score & Status Indicators -->
+        <div class="flex items-center gap-3">
+            <div class="bg-amber-100 px-3 py-1.5 rounded-2xl border-2 border-amber-200 flex items-center gap-2">
+                <span class="text-xs md:text-sm">⚡</span>
+                <span class="font-extrabold text-amber-800 text-xs md:text-sm"><span id="xpDisplay">100</span> COGNITIVE XP</span>
+            </div>
+            <div id="pageIndicator" class="bg-violet-50 text-violet-700 px-3 py-1.5 rounded-xl border border-violet-100 text-xs font-black tracking-wider">
+                HALAMAN: 1 / 35
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="max-w-7xl w-full mx-auto p-4 md:p-6 lg:p-8 flex-grow flex flex-col justify-center">
+        
+        <!-- Top Progress Bar -->
+        <div class="w-full bg-slate-200 h-2.5 rounded-full mb-6 overflow-hidden border border-slate-300/40 shadow-inner">
+            <div id="progressBar" class="bg-gradient-to-r from-violet-400 via-fuchsia-500 to-indigo-600 h-full transition-all duration-300" style="width: 2.85%"></div>
+        </div>
+
+        <!-- Centered Layout Box -->
+        <div class="max-w-4xl mx-auto w-full">
+            
+            <!-- Dynamic Slide Box -->
+            <section class="w-full">
+                <div id="slides-container" class="bg-white rounded-3xl p-6 md:p-10 shadow-xl border-4 border-slate-100/90 min-h-[520px] flex flex-col justify-between">
+                    
+                    <!-- Dynamic Slide Content Area -->
+                    <div id="slides-content" class="flex-grow">
+                        
+                        <!-- Slide 1: Welcome -->
+                        <div class="slide active flex-col items-center text-center gap-5" id="slide-1">
+                            <div class="w-32 h-32 bg-violet-50 rounded-full flex items-center justify-center border-4 border-dashed border-violet-200">
+                                <svg width="80" height="80" viewBox="0 0 100 100">
+                                    <rect x="15" y="15" width="40" height="40" fill="none" stroke="#8b5cf6" stroke-width="3" rx="4"/>
+                                    <circle cx="65" cy="65" r="20" fill="none" stroke="#ec4899" stroke-width="3"/>
+                                    <polygon points="35,85 55,50 75,85" fill="none" stroke="#10b981" stroke-width="3"/>
+                                </svg>
+                            </div>
+                            <h2 class="heading-font text-3xl md:text-4xl text-slate-900 font-extrabold tracking-tight">
+                                Ekspedisi Geometris:<br>
+                                <span class="text-transparent bg-clip-text bg-gradient-to-r from-violet-600 to-indigo-600">Asal-Usul Keliling &amp; Luas</span>
+                            </h2>
+                            <p class="text-sm md:text-base text-slate-500 max-w-lg leading-relaxed">
+                                Halo, petualang matematika! Pernahkah kamu bertanya-tanya mengapa luas segitiga adalah $\frac{1}{2} \times a \times t$, atau dari mana datangnya nilai $\pi$ pada lingkaran? Mari kita pecahkan misteri sejarah asal-usul rumus bangun datar bersama!
+                            </p>
+                            <div class="bg-emerald-50 border-l-4 border-emerald-400 p-3 rounded-r-xl max-w-md text-left text-xs">
+                                <span class="font-extrabold text-emerald-800 uppercase block mb-1">🎯 KURIKULUM MERDEKA NOTE:</span>
+                                <span class="text-slate-600">Fokus kita bukanlah menghafal rumus mentah-mentah, melainkan memahami bagaimana rumus tersebut terlahir secara logika!</span>
+                            </div>
+                        </div>
+
+                        <!-- Slide 2: Objectives -->
+                        <div class="slide flex-col gap-4" id="slide-2">
+                            <h3 class="heading-font text-2xl text-slate-900 font-extrabold">🎯 Misi Ekspedisi Belajarmu</h3>
+                            <p class="text-slate-500 text-sm">Dengan kemampuan belajarmu yang cepat, hari ini kamu akan menaklukkan tujuan pembelajaran kelas VII:</p>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
+                                <div class="p-4 bg-violet-50 rounded-2xl border border-violet-100 flex gap-3">
+                                    <span class="text-2xl">🧩</span>
+                                    <div>
+                                        <h4 class="font-bold text-slate-800 text-sm">Dekonstruksi Spasial</h4>
+                                        <p class="text-[11px] text-slate-500 mt-1">Membongkar dan menyusun kembali bangun datar untuk menemukan asal-usul rumus luasnya secara intuitif.</p>
+                                    </div>
+                                </div>
+                                <div class="p-4 bg-fuchsia-50 rounded-2xl border border-fuchsia-100 flex gap-3">
+                                    <span class="text-2xl">📐</span>
+                                    <div>
+                                        <h4 class="font-bold text-slate-800 text-sm">Formulasi Aljabar</h4>
+                                        <p class="text-[11px] text-slate-500 mt-1">Menggunakan konsep keliling dan luas untuk memecahkan masalah kehidupan sehari-hari secara matematis.</p>
+                                    </div>
+                                </div>
+                                <div class="p-4 bg-emerald-50 rounded-2xl border border-emerald-100 flex gap-3">
+                                    <span class="text-2xl">🔄</span>
+                                    <div>
+                                        <h4 class="font-bold text-slate-800 text-sm">Koneksi Antar Rumus</h4>
+                                        <p class="text-[11px] text-slate-500 mt-1">Memahami bahwa hampir seluruh rumus luas berasal dari modifikasi luas persegi panjang!</p>
+                                    </div>
+                                </div>
+                                <div class="p-4 bg-amber-50 rounded-2xl border border-amber-100 flex gap-3">
+                                    <span class="text-2xl">🏆</span>
+                                    <div>
+                                        <h4 class="font-bold text-slate-800 text-sm">HOTS Problem Solver</h4>
+                                        <p class="text-[11px] text-slate-500 mt-1">Menyelesaikan tantangan luas gabungan dan optimalisasi geometris kompleks.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Slide 3: Warm-up Question 1 -->
+                        <div class="slide flex-col gap-4" id="slide-3">
+                            <span class="text-xs font-bold text-amber-600 bg-amber-50 px-2.5 py-1 rounded-full border border-amber-200 self-start">🔥 WARM-UP 1/4</span>
+                            <h3 class="heading-font text-xl md:text-2xl text-slate-900 font-extrabold">Logika Grid Satuan</h3>
+                            <p class="text-slate-500 text-sm">Hitunglah berapa luas bangun hijau di bawah ini dengan menghitung persegi satuannya!</p>
+                            <div class="flex justify-center my-2">
+                                <svg width="180" height="180" viewBox="0 0 100 100" class="border border-slate-300 rounded-lg bg-slate-50">
+                                    <!-- Grid lines -->
+                                    <line x1="20" y1="0" x2="20" y2="100" stroke="#cbd5e1" stroke-width="0.5"/>
+                                    <line x1="40" y1="0" x2="40" y2="100" stroke="#cbd5e1" stroke-width="0.5"/>
+                                    <line x1="60" y1="0" x2="60" y2="100" stroke="#cbd5e1" stroke-width="0.5"/>
+                                    <line x1="80" y1="0" x2="80" y2="100" stroke="#cbd5e1" stroke-width="0.5"/>
+                                    <line x1="0" y1="20" x2="100" y2="20" stroke="#cbd5e1" stroke-width="0.5"/>
+                                    <line x1="0" y1="40" x2="100" y2="40" stroke="#cbd5e1" stroke-width="0.5"/>
+                                    <line x1="0" y1="60" x2="100" y2="60" stroke="#cbd5e1" stroke-width="0.5"/>
+                                    <line x1="0" y1="80" x2="100" y2="80" stroke="#cbd5e1" stroke-width="0.5"/>
+                                    <!-- Active Shape -->
+                                    <rect x="20" y="20" width="60" height="40" fill="#10b981" fill-opacity="0.75" stroke="#059669" stroke-width="2"/>
+                                </svg>
+                            </div>
+                            <div class="grid grid-cols-3 gap-3 max-w-md mx-auto">
+                                <button onclick="checkWarmup(1, 4, this)" class="p-3 rounded-xl border-2 border-slate-200 font-bold hover:border-violet-500 text-xs transition-all bg-white">4 Satuan Luas</button>
+                                <button onclick="checkWarmup(1, 6, this)" class="p-3 rounded-xl border-2 border-slate-200 font-bold hover:border-violet-500 text-xs transition-all bg-white">6 Satuan Luas</button>
+                                <button onclick="checkWarmup(1, 12, this)" class="p-3 rounded-xl border-2 border-slate-200 font-bold hover:border-violet-500 text-xs transition-all bg-white">12 Satuan Luas</button>
+                            </div>
+                            <div id="wuFeedback-1" class="text-center font-bold text-xs mt-1"></div>
+                        </div>
+
+                        <!-- Slide 4: Warm-up Question 2 -->
+                        <div class="slide flex-col gap-4" id="slide-4">
+                            <span class="text-xs font-bold text-amber-600 bg-amber-50 px-2.5 py-1 rounded-full border border-amber-200 self-start">🔥 WARM-UP 2/4</span>
+                            <h3 class="heading-font text-xl md:text-2xl text-slate-900 font-extrabold">Logika Keliling Visual</h3>
+                            <p class="text-slate-500 text-sm">Jika kamu berjalan mengelilingi pagar kebun berbentuk segitiga sama sisi dengan panjang sisi $8\text{ meter}$, berapa total jarak yang kamu tempuh?</p>
+                            <div class="flex justify-center my-1">
+                                <svg width="140" height="120" viewBox="0 0 100 90">
+                                    <polygon points="50,15 15,80 85,80" fill="none" stroke="#8b5cf6" stroke-width="3"/>
+                                    <text x="50" y="90" fill="#64748b" font-size="8" text-anchor="middle" font-weight="bold">8 m</text>
+                                    <text x="25" y="45" fill="#64748b" font-size="8" text-anchor="middle" font-weight="bold">8 m</text>
+                                    <text x="75" y="45" fill="#64748b" font-size="8" text-anchor="middle" font-weight="bold">8 m</text>
+                                </svg>
+                            </div>
+                            <div class="grid grid-cols-3 gap-3 max-w-md mx-auto">
+                                <button onclick="checkWarmup(2, 16, this)" class="p-3 rounded-xl border-2 border-slate-200 font-bold hover:border-violet-500 text-xs transition-all bg-white">16 meter</button>
+                                <button onclick="checkWarmup(2, 24, this)" class="p-3 rounded-xl border-2 border-slate-200 font-bold hover:border-violet-500 text-xs transition-all bg-white">24 meter</button>
+                                <button onclick="checkWarmup(2, 32, this)" class="p-3 rounded-xl border-2 border-slate-200 font-bold hover:border-violet-500 text-xs transition-all bg-white">32 meter</button>
+                            </div>
+                            <div id="wuFeedback-2" class="text-center font-bold text-xs mt-1"></div>
+                        </div>
+
+                        <!-- Slide 5: Warm-up Question 3 -->
+                        <div class="slide flex-col gap-4" id="slide-5">
+                            <span class="text-xs font-bold text-amber-600 bg-amber-50 px-2.5 py-1 rounded-full border border-amber-200 self-start">🔥 WARM-UP 3/4</span>
+                            <h3 class="heading-font text-xl md:text-2xl text-slate-900 font-extrabold">Luas Segitiga Separuh</h3>
+                            <p class="text-slate-500 text-sm">Jika luas persegi panjang berukuran $10 \text{ cm} \times 6 \text{ cm}$ adalah $60 \text{ cm}^2$, berapakah luas segitiga siku-siku yang didapat dengan memotong diagonalnya?</p>
+                            <div class="flex justify-center my-2">
+                                <svg width="160" height="100" viewBox="0 0 100 60">
+                                    <rect x="10" y="10" width="80" height="40" fill="none" stroke="#94a3b8" stroke-dasharray="2,2"/>
+                                    <polygon points="10,50 90,50 90,10" fill="#ec4899" fill-opacity="0.5" stroke="#db2777" stroke-width="2"/>
+                                    <line x1="10" y1="50" x2="90" y2="10" stroke="#db2777" stroke-width="2" stroke-dasharray="2,2"/>
+                                </svg>
+                            </div>
+                            <div class="grid grid-cols-3 gap-3 max-w-md mx-auto">
+                                <button onclick="checkWarmup(3, 15, this)" class="p-3 rounded-xl border-2 border-slate-200 font-bold hover:border-violet-500 text-xs transition-all bg-white">15 cm²</button>
+                                <button onclick="checkWarmup(3, 30, this)" class="p-3 rounded-xl border-2 border-slate-200 font-bold hover:border-violet-500 text-xs transition-all bg-white">30 cm²</button>
+                                <button onclick="checkWarmup(3, 60, this)" class="p-3 rounded-xl border-2 border-slate-200 font-bold hover:border-violet-500 text-xs transition-all bg-white">60 cm²</button>
+                            </div>
+                            <div id="wuFeedback-3" class="text-center font-bold text-xs mt-1"></div>
+                        </div>
+
+                        <!-- Slide 6: Warm-up Question 4 -->
+                        <div class="slide flex-col gap-4" id="slide-6">
+                            <span class="text-xs font-bold text-amber-600 bg-amber-50 px-2.5 py-1 rounded-full border border-amber-200 self-start">🔥 WARM-UP 4/4</span>
+                            <h3 class="heading-font text-xl md:text-2xl text-slate-900 font-extrabold">Konservasi Luas Puzzle</h3>
+                            <p class="text-slate-500 text-sm">Jika kamu memotong sebuah bangun datar menjadi 3 bagian, lalu menyusunnya kembali menjadi bentuk baru tanpa tumpang tindih, apakah total luasnya berubah?</p>
+                            <div class="flex justify-center my-2 gap-4">
+                                <div class="bg-violet-50 p-3 rounded-xl border border-violet-100 flex flex-col items-center">
+                                    <svg width="60" height="60" viewBox="0 0 60 60">
+                                        <rect x="10" y="10" width="40" height="40" fill="#3b82f6" fill-opacity="0.8"/>
+                                    </svg>
+                                    <span class="text-[10px] text-slate-400 font-bold mt-1">Bentuk A</span>
+                                </div>
+                                <div class="flex items-center text-slate-400 text-2xl">➔</div>
+                                <div class="bg-emerald-50 p-3 rounded-xl border border-emerald-100 flex flex-col items-center">
+                                    <svg width="60" height="60" viewBox="0 0 60 60">
+                                        <polygon points="10,50 30,10 50,50" fill="#10b981" fill-opacity="0.8"/>
+                                    </svg>
+                                    <span class="text-[10px] text-slate-400 font-bold mt-1">Bentuk B</span>
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-2 gap-3 max-w-md mx-auto">
+                                <button onclick="checkWarmup(4, 'sama', this)" class="p-3 rounded-xl border-2 border-slate-200 font-bold hover:border-violet-500 text-xs transition-all bg-white">Tetap Sama (Konservasi)</button>
+                                <button onclick="checkWarmup(4, 'beda', this)" class="p-3 rounded-xl border-2 border-slate-200 font-bold hover:border-violet-500 text-xs transition-all bg-white">Berubah Ukuran Luasnya</button>
+                            </div>
+                            <div id="wuFeedback-4" class="text-center font-bold text-xs mt-1"></div>
+                        </div>
+
+                        <!-- Slide 7: Real-World Connection -->
+                        <div class="slide flex-col gap-4" id="slide-7">
+                            <h3 class="heading-font text-2xl text-slate-900 font-extrabold">🌍 Geometri di Dunia Nyata</h3>
+                            <p class="text-slate-500 text-sm">Mengapa matematika bangun datar itu krusial di dunia nyata?</p>
+                            <div class="p-5 bg-gradient-to-r from-violet-50 to-fuchsia-50 rounded-2xl border border-violet-100 flex flex-col md:flex-row items-center gap-6 my-2">
+                                <div class="w-24 h-24 shrink-0 bg-white rounded-2xl flex items-center justify-center text-4xl shadow-md">🏡</div>
+                                <div class="space-y-1">
+                                    <h4 class="font-bold text-slate-800 text-sm">Arsitektur &amp; Desain Antarmuka</h4>
+                                    <p class="text-xs text-slate-600 leading-relaxed">
+                                        Dari menghitung kebutuhan ubin rumah, menentukan luas lahan kebun, hingga mendesain tata letak tombol pada layar ponsel cerdasmu, semuanya berakar pada perhitungan presisi keliling (panjang tepi) dan luas (ukuran permukaan) bidang dua dimensi!
+                                    </p>
+                                </div>
+                            </div>
+                            <p class="text-xs text-slate-400 italic text-center">"Alam semesta ditulis dalam bahasa matematika, dan segitiga serta lingkaran adalah huruf-huruf pembentuk utamanya!"</p>
+                        </div>
+
+                        <!-- Slide 8: Concept 1: Persegi -->
+                        <div class="slide flex-col gap-4" id="slide-8">
+                            <h3 class="heading-font text-2xl text-slate-900 font-extrabold">🟢 Konsep 1: Persegi (Square)</h3>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 my-1">
+                                <div class="space-y-3">
+                                    <p class="text-xs text-slate-600 leading-relaxed">
+                                        Persegi adalah bidang dua dimensi dengan empat sisi sama panjang ($s$) dan empat sudut siku-siku ($90^\circ$).
+                                    </p>
+                                    <div class="p-3 bg-slate-50 rounded-xl border">
+                                        <h4 class="font-extrabold text-xs text-violet-700 uppercase mb-1">Asal-usul Rumus Keliling:</h4>
+                                        <p class="text-xs text-slate-600">Menghitung jarak mengelilingi tepinya: $K = s + s + s + s = 4s$.</p>
+                                    </div>
+                                    <div class="p-3 bg-violet-50 rounded-xl border border-violet-100">
+                                        <h4 class="font-extrabold text-xs text-violet-700 uppercase mb-1">Asal-usul Rumus Luas:</h4>
+                                        <p class="text-xs text-slate-600">Menata persegi-persegi kecil berukuran $1 \times 1$ pada baris dan kolom: $L = s \times s = s^2$.</p>
+                                    </div>
+                                </div>
+                                <div class="bg-slate-50 p-4 rounded-2xl border flex flex-col items-center justify-center">
+                                    <svg width="140" height="140" viewBox="0 0 100 100">
+                                        <rect x="15" y="15" width="70" height="70" fill="#a78bfa" fill-opacity="0.4" stroke="#7c3aed" stroke-width="3" rx="2"/>
+                                        <text x="50" y="93" fill="#7c3aed" font-weight="bold" font-size="10" text-anchor="middle">sisi (s)</text>
+                                        <text x="94" y="54" fill="#7c3aed" font-weight="bold" font-size="10" text-anchor="start">sisi (s)</text>
+                                    </svg>
+                                    <span class="text-[10px] text-slate-400 mt-2">Persegi memiliki sifat simetris lipat &amp; putar sempurna.</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Slide 9: Concept 2: Persegi Panjang -->
+                        <div class="slide flex-col gap-4" id="slide-9">
+                            <h3 class="heading-font text-2xl text-slate-900 font-extrabold">🟦 Konsep 2: Persegi Panjang (Rectangle)</h3>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 my-1">
+                                <div class="space-y-3">
+                                    <p class="text-xs text-slate-600 leading-relaxed">
+                                        Persegi panjang memiliki sepasang sisi sejajar yang berbeda panjangnya: panjang ($p$) dan lebar ($l$).
+                                    </p>
+                                    <div class="p-3 bg-slate-50 rounded-xl border">
+                                        <h4 class="font-extrabold text-xs text-blue-700 uppercase mb-1">Asal-usul Keliling:</h4>
+                                        <p class="text-xs text-slate-600">$K = p + l + p + l = 2p + 2l = 2(p + l)$.</p>
+                                    </div>
+                                    <div class="p-3 bg-blue-50 rounded-xl border border-blue-100">
+                                        <h4 class="font-extrabold text-xs text-blue-700 uppercase mb-1">Asal-usul Luas:</h4>
+                                        <p class="text-xs text-slate-600">Representasi dasar grid baris $\times$ kolom: $L = p \times l$. Ini adalah <strong>induk dari seluruh rumus luas bangun datar lainnya!</strong></p>
+                                    </div>
+                                </div>
+                                <div class="bg-slate-50 p-4 rounded-2xl border flex flex-col items-center justify-center">
+                                    <svg width="180" height="110" viewBox="0 0 120 70">
+                                        <rect x="10" y="10" width="100" height="50" fill="#60a5fa" fill-opacity="0.4" stroke="#2563eb" stroke-width="3" rx="2"/>
+                                        <text x="60" y="68" fill="#2563eb" font-weight="bold" font-size="9" text-anchor="middle">panjang (p)</text>
+                                        <text x="115" y="40" fill="#2563eb" font-weight="bold" font-size="9" text-anchor="start">lebar (l)</text>
+                                    </svg>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Slide 10: Concept 3: Segitiga -->
+                        <div class="slide flex-col gap-4" id="slide-10">
+                            <h3 class="heading-font text-2xl text-slate-900 font-extrabold">📐 Konsep 3: Segitiga (Triangle)</h3>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 my-1">
+                                <div class="space-y-3">
+                                    <p class="text-xs text-slate-600 leading-relaxed">
+                                        Segitiga terbentuk dari 3 garis lurus saling terhubung dengan alas ($a$) dan tinggi ($t$).
+                                    </p>
+                                    <div class="p-3 bg-violet-50 rounded-xl border border-violet-100">
+                                        <h4 class="font-extrabold text-xs text-violet-700 uppercase mb-1">Asal-usul Rumus Luas:</h4>
+                                        <p class="text-xs text-slate-600">
+                                            Jika sebuah persegi panjang dibelah menjadi dua secara diagonal, kita mendapatkan dua segitiga siku-siku identik.<br>
+                                            Oleh karena itu, Luas Segitiga adalah setengah dari persegi panjang:<br>
+                                            $$L = \frac{1}{2} \times \text{alas} \times \text{tinggi}$$
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="bg-slate-50 p-4 rounded-2xl border flex flex-col items-center justify-center">
+                                    <svg width="160" height="120" viewBox="0 0 100 80">
+                                        <!-- Rectangle container -->
+                                        <rect x="10" y="10" width="80" height="60" fill="none" stroke="#cbd5e1" stroke-dasharray="3,3"/>
+                                        <!-- Triangle A -->
+                                        <polygon points="10,70 90,70 90,10" fill="#f43f5e" fill-opacity="0.4" stroke="#e11d48" stroke-width="2"/>
+                                        <!-- Diagonal split line -->
+                                        <line x1="10" y1="70" x2="90" y2="10" stroke="#cbd5e1" stroke-dasharray="3,3"/>
+                                        <text x="50" y="78" fill="#e11d48" font-weight="bold" font-size="8" text-anchor="middle">alas (a)</text>
+                                        <text x="96" y="44" fill="#e11d48" font-weight="bold" font-size="8" text-anchor="start">tinggi (t)</text>
+                                    </svg>
+                                    <span class="text-[10px] text-slate-400 mt-2 text-center">Tinggi ($t$) didefinisikan tegak lurus dengan alas ($a$).</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Slide 11: Concept 4: Jajar Genjang -->
+                        <div class="slide flex-col gap-4" id="slide-11">
+                            <h3 class="heading-font text-2xl text-slate-900 font-extrabold">Konsep 4: Jajar Genjang (Parallelogram)</h3>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 my-1">
+                                <div class="space-y-3">
+                                    <div class="p-3 bg-emerald-50 rounded-xl border border-emerald-100">
+                                        <h4 class="font-extrabold text-xs text-emerald-700 uppercase mb-1">Asal-usul Rumus Luas:</h4>
+                                        <p class="text-xs text-slate-600 leading-relaxed">
+                                            Ambil segitiga siku-siku dari sisi kiri jajar genjang, geser ke arah kanan secara sejajar. Luar biasa! Jajar genjang tersebut sekarang berubah menjadi <strong>Persegi Panjang sempurna!</strong><br>
+                                            Karena luasnya tidak berubah, maka:<br>
+                                            $$L = \text{alas} \times \text{tinggi}$$
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="bg-slate-50 p-4 rounded-2xl border flex flex-col items-center justify-center">
+                                    <svg width="180" height="120" viewBox="0 0 120 80">
+                                        <!-- Main body rectangle shadow -->
+                                        <rect x="30" y="15" width="60" height="45" fill="#10b981" fill-opacity="0.15" stroke="#cbd5e1" stroke-dasharray="2,2"/>
+                                        <!-- Shifting triangle -->
+                                        <polygon points="10,60 30,60 30,15" fill="#f59e0b" fill-opacity="0.5" stroke="#d97706" stroke-width="1.5" stroke-dasharray="2,2"/>
+                                        <!-- Main Jajar genjang -->
+                                        <polygon points="30,15 90,15 70,60 10,60" fill="#10b981" fill-opacity="0.4" stroke="#059669" stroke-width="2"/>
+                                        <!-- Arrow showing translation -->
+                                        <path d="M 20,37 L 80,37" stroke="#dc2626" stroke-width="1.5" marker-end="url(#arrow)" stroke-dasharray="3,3"/>
+                                        <text x="50" y="68" fill="#059669" font-weight="bold" font-size="8" text-anchor="middle">alas (a)</text>
+                                        <text x="35" y="38" fill="#d97706" font-weight="bold" font-size="8" text-anchor="start">tinggi (t)</text>
+                                    </svg>
+                                    <span class="text-[10px] text-slate-400 mt-2 text-center">Bukan sisi miring yang dihitung, melainkan tinggi tegak lurus!</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Slide 12: Concept 5: Belah Ketupat -->
+                        <div class="slide flex-col gap-4" id="slide-12">
+                            <h3 class="heading-font text-2xl text-slate-900 font-extrabold">🔶 Konsep 5: Belah Ketupat (Rhombus)</h3>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 my-1">
+                                <div class="space-y-3">
+                                    <p class="text-xs text-slate-600 leading-relaxed">
+                                        Belah ketupat adalah segi empat dengan empat sisi yang sama panjang, serta diagonal yang saling berpotongan tegak lurus ($90^\circ$).
+                                    </p>
+                                    <div class="p-3 bg-amber-50 rounded-xl border border-amber-100">
+                                        <h4 class="font-extrabold text-xs text-amber-700 uppercase mb-1">Asal-usul Rumus Luas:</h4>
+                                        <p class="text-xs text-slate-600 leading-relaxed">
+                                            Belah ketupat dapat dibingkai sempurna di dalam persegi panjang dengan panjang sisi $d_1$ dan $d_2$.<br>
+                                            Luas belah ketupat adalah tepat <strong>setengah</strong> dari luas persegi panjang bingkainya:<br>
+                                            $$L = \frac{1}{2} \times d_1 \times d_2$$
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="bg-slate-50 p-4 rounded-2xl border flex flex-col items-center justify-center">
+                                    <svg width="140" height="140" viewBox="0 0 100 100">
+                                        <!-- Outer Rectangle frame -->
+                                        <rect x="15" y="15" width="70" height="70" fill="none" stroke="#cbd5e1" stroke-dasharray="3,3"/>
+                                        <!-- Rhombus -->
+                                        <polygon points="50,15 85,50 50,85 15,50" fill="#f59e0b" fill-opacity="0.4" stroke="#d97706" stroke-width="2"/>
+                                        <!-- Diagonal lines -->
+                                        <line x1="15" y1="50" x2="85" y2="50" stroke="#b45309" stroke-width="1.5" stroke-dasharray="2,2"/>
+                                        <line x1="50" y1="15" x2="50" y2="85" stroke="#b45309" stroke-width="1.5" stroke-dasharray="2,2"/>
+                                        <text x="50" y="47" fill="#b45309" font-weight="bold" font-size="8" text-anchor="middle">d1</text>
+                                        <text x="53" y="65" fill="#b45309" font-weight="bold" font-size="8" text-anchor="start">d2</text>
+                                    </svg>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Slide 13: Concept 6: Layang-layang -->
+                        <div class="slide flex-col gap-4" id="slide-13">
+                            <h3 class="heading-font text-2xl text-slate-900 font-extrabold">🪁 Konsep 6: Layang-layang (Kite)</h3>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 my-1">
+                                <div class="space-y-3">
+                                    <p class="text-xs text-slate-600 leading-relaxed">
+                                        Layang-layang memiliki dua pasang sisi sama panjang, tetapi tidak sejajar satu sama lain.
+                                    </p>
+                                    <div class="p-3 bg-fuchsia-50 rounded-xl border border-fuchsia-100">
+                                        <h4 class="font-extrabold text-xs text-fuchsia-700 uppercase mb-1">Asal-usul Rumus Luas:</h4>
+                                        <p class="text-xs text-slate-600 leading-relaxed">
+                                            Sama halnya dengan belah ketupat, jika kita membongkar potongan layang-layang menjadi dua buah segitiga besar (atas dan bawah), luas totalnya tetap merupakan setengah dari perkalian diagonal-diagonalnya:<br>
+                                            $$L = \frac{1}{2} \times d_1 \times d_2$$
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="bg-slate-50 p-4 rounded-2xl border flex flex-col items-center justify-center">
+                                    <svg width="130" height="150" viewBox="0 0 80 100">
+                                        <!-- Rectangle -->
+                                        <rect x="10" y="10" width="60" height="80" fill="none" stroke="#cbd5e1" stroke-dasharray="3,3"/>
+                                        <!-- Kite -->
+                                        <polygon points="40,10 70,35 40,90 10,35" fill="#ec4899" fill-opacity="0.4" stroke="#c026d3" stroke-width="2"/>
+                                        <line x1="10" y1="35" x2="70" y2="35" stroke="#701a75" stroke-width="1" stroke-dasharray="2,2"/>
+                                        <line x1="40" y1="10" x2="40" y2="90" stroke="#701a75" stroke-width="1" stroke-dasharray="2,2"/>
+                                        <text x="43" y="60" fill="#701a75" font-weight="bold" font-size="8" text-anchor="start">d1</text>
+                                        <text x="55" y="32" fill="#701a75" font-weight="bold" font-size="8" text-anchor="middle">d2</text>
+                                    </svg>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Slide 14: Concept 7: Trapesium -->
+                        <div class="slide flex-col gap-4" id="slide-14">
+                            <h3 class="heading-font text-2xl text-slate-900 font-extrabold">📐 Konsep 7: Trapesium (Trapezoid)</h3>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 my-1">
+                                <div class="space-y-3">
+                                    <p class="text-xs text-slate-600 leading-relaxed">
+                                        Trapesium memiliki setidaknya sepasang sisi sejajar yang tidak sama panjang ($a$ dan $b$).
+                                    </p>
+                                    <div class="p-3 bg-cyan-50 rounded-xl border border-cyan-100">
+                                        <h4 class="font-extrabold text-xs text-cyan-700 uppercase mb-1">Asal-usul Rumus Luas:</h4>
+                                        <p class="text-xs text-slate-600 leading-relaxed">
+                                            Gunting bagian tengah trapesium setinggi setengahnya, balikkan, dan gabungkan di sisi sebelahnya. Sekarang ia berubah menjadi Jajar Genjang dengan panjang alas $(a + b)$ dan tinggi $\frac{1}{2}t$.<br>
+                                            $$L = \frac{1}{2} \times (a + b) \times t$$
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="bg-slate-50 p-4 rounded-2xl border flex flex-col items-center justify-center">
+                                    <svg width="180" height="110" viewBox="0 0 140 80">
+                                        <!-- Trapezoid -->
+                                        <polygon points="30,15 100,15 120,60 10,60" fill="#06b6d4" fill-opacity="0.4" stroke="#0891b2" stroke-width="2"/>
+                                        <line x1="30" y1="15" x2="30" y2="60" stroke="#0891b2" stroke-width="1.5" stroke-dasharray="2,2"/>
+                                        <text x="65" y="10" fill="#0891b2" font-weight="bold" font-size="8" text-anchor="middle">atas (a)</text>
+                                        <text x="65" y="72" fill="#0891b2" font-weight="bold" font-size="8" text-anchor="middle">bawah (b)</text>
+                                        <text x="24" y="38" fill="#0891b2" font-weight="bold" font-size="8" text-anchor="end">tinggi (t)</text>
+                                    </svg>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Slide 15: Concept 8: Lingkaran -->
+                        <div class="slide flex-col gap-4" id="slide-15">
+                            <h3 class="heading-font text-2xl text-slate-900 font-extrabold">🔴 Konsep 8: Lingkaran (Circle)</h3>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 my-1">
+                                <div class="space-y-3">
+                                    <div class="p-3 bg-rose-50 rounded-xl border border-rose-100 text-xs text-slate-600 space-y-2">
+                                        <p>
+                                            <strong>Asal-usul Konstanta $\pi$:</strong> Rasio keliling lingkaran dibagi diameternya selalu bernilai konstan, yaitu $\pi \approx 3,14$ atau $\frac{22}{7}$.
+                                        </p>
+                                        <p>
+                                            <strong>Asal-usul Rumus Luas:</strong> Jika lingkaran dipotong menjadi belasan sektor segitiga kecil (seperti pizza) lalu disusun bersilangan, ia membentuk <strong>Persegi Panjang</strong> dengan panjang alas setengah keliling ($\pi r$) dan lebar berupa jari-jari ($r$). Maka:<br>
+                                            $$L = \text{panjang} \times \text{lebar} = \pi r \times r = \pi r^2$$
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="bg-slate-50 p-4 rounded-2xl border flex flex-col items-center justify-center">
+                                    <svg width="140" height="140" viewBox="0 0 100 100">
+                                        <circle cx="50" cy="50" r="35" fill="#f43f5e" fill-opacity="0.3" stroke="#e11d48" stroke-width="2.5"/>
+                                        <!-- Sector slices -->
+                                        <line x1="50" y1="15" x2="50" y2="85" stroke="#e11d48" stroke-width="0.5"/>
+                                        <line x1="15" y1="50" x2="85" y2="50" stroke="#e11d48" stroke-width="0.5"/>
+                                        <line x1="25" y1="25" x2="75" y2="75" stroke="#e11d48" stroke-width="0.5"/>
+                                        <line x1="25" y1="75" x2="75" y2="25" stroke="#e11d48" stroke-width="0.5"/>
+                                        <!-- Radius line -->
+                                        <line x1="50" y1="50" x2="85" y2="50" stroke="#000" stroke-width="2"/>
+                                        <text x="65" y="45" fill="#000" font-weight="bold" font-size="8">r</text>
+                                    </svg>
+                                    <span class="text-[10px] text-slate-400 mt-2 text-center">Keliling ($K$) $= 2\pi r$.</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Slide 16: Worked Example 1 -->
+                        <div class="slide flex-col gap-4" id="slide-16">
+                            <span class="text-xs font-bold text-violet-600 bg-violet-50 px-2.5 py-1 rounded-full border border-violet-200 self-start">CONTOH SOAL ANALITIS 1</span>
+                            <h3 class="heading-font text-xl md:text-2xl text-slate-900 font-extrabold">Studi Kasus: Memilih Karpet Lahan</h3>
+                            <p class="text-slate-500 text-sm">Pak Amir ingin melapisi ruangan berukuran $6\text{ m} \times 4\text{ m}$ dengan karpet berbentuk persegi berukuran sisi $2\text{ m}$. Berapa karpet yang ia butuhkan?</p>
+                            <div class="p-4 bg-amber-50 border-l-4 border-amber-400 rounded-r-2xl text-xs space-y-2 text-slate-700">
+                                <p><strong>1. Analisis Luas Ruangan:</strong></p>
+                                <p>$$L_{\text{ruangan}} = p \times l = 6 \times 4 = 24\text{ m}^2$$</p>
+                                <p><strong>2. Analisis Luas Karpet:</strong></p>
+                                <p>$$L_{\text{karpet}} = s \times s = 2 \times 2 = 4\text{ m}^2$$</p>
+                                <p><strong>3. Hitung Kebutuhan:</strong></p>
+                                <p>$$\text{Jumlah Karpet} = \frac{L_{\text{ruangan}}}{L_{\text{karpet}}} = \frac{24}{4} = 6\text{ buah karpet}$$</p>
+                            </div>
+                        </div>
+
+                        <!-- Slide 17: Worked Example 2 -->
+                        <div class="slide flex-col gap-4" id="slide-17">
+                            <span class="text-xs font-bold text-violet-600 bg-violet-50 px-2.5 py-1 rounded-full border border-violet-200 self-start">CONTOH SOAL ANALITIS 2</span>
+                            <h3 class="heading-font text-xl md:text-2xl text-slate-900 font-extrabold">Studi Kasus: Jajar Genjang dan Segitiga Berbagi Sisi</h3>
+                            <p class="text-slate-500 text-sm">Sebuah jajar genjang memiliki panjang alas $12\text{ cm}$ dan tinggi $8\text{ cm}$. Jika ada segitiga dengan alas yang sama, berapa tinggi segitiga agar luasnya sama dengan jajar genjang?</p>
+                            <div class="p-4 bg-amber-50 border-l-4 border-amber-400 rounded-r-2xl text-xs space-y-2 text-slate-700">
+                                <p><strong>1. Luas Jajar Genjang:</strong></p>
+                                <p>$$L_{\text{JG}} = a \times t = 12 \times 8 = 96\text{ cm}^2$$</p>
+                                <p><strong>2. Luas Segitiga Harus Sama:</strong></p>
+                                <p>$$L_{\text{segitiga}} = \frac{1}{2} \times a \times t_{\text{segitiga}} = 96$$</p>
+                                <p>$$\frac{1}{2} \times 12 \times t_{\text{segitiga}} = 96 \implies 6 \times t_{\text{segitiga}} = 96 \implies t_{\text{segitiga}} = 16\text{ cm}$$</p>
+                            </div>
+                        </div>
+
+                        <!-- Slide 18: Worked Example 3 -->
+                        <div class="slide flex-col gap-4" id="slide-18">
+                            <span class="text-xs font-bold text-violet-600 bg-violet-50 px-2.5 py-1 rounded-full border border-violet-200 self-start">CONTOH SOAL ANALITIS 3</span>
+                            <h3 class="heading-font text-xl md:text-2xl text-slate-900 font-extrabold">Studi Kasus: Luas Bingkai Foto</h3>
+                            <p class="text-slate-500 text-sm">Sebuah foto berukuran $12\text{ cm} \times 8\text{ cm}$ ditempel pada karton. Di sebelah kiri, kanan, atas, dan bawah foto tersisa karton selebar $2\text{ cm}$. Berapakah luas karton?</p>
+                            <div class="p-4 bg-amber-50 border-l-4 border-amber-400 rounded-r-2xl text-xs space-y-2 text-slate-700">
+                                <p><strong>1. Menghitung Ukuran Karton:</strong></p>
+                                <p>Panjang karton = $12 + 2 + 2 = 16\text{ cm}$</p>
+                                <p>Lebar karton = $8 + 2 + 2 = 12\text{ cm}$</p>
+                                <p><strong>2. Menghitung Luas Karton:</strong></p>
+                                <p>$$L_{\text{karton}} = 16 \times 12 = 192\text{ cm}^2$$</p>
+                            </div>
+                        </div>
+
+                        <!-- Slide 19: Worked Example 4 -->
+                        <div class="slide flex-col gap-4" id="slide-19">
+                            <span class="text-xs font-bold text-violet-600 bg-violet-50 px-2.5 py-1 rounded-full border border-violet-200 self-start">CONTOH SOAL ANALITIS 4</span>
+                            <h3 class="heading-font text-xl md:text-2xl text-slate-900 font-extrabold">Studi Kasus: Optimalisasi Jari-jari Lingkaran</h3>
+                            <p class="text-slate-500 text-sm">Jika keliling lingkaran adalah $44\text{ cm}$ (gunakan $\pi = \frac{22}{7}$), tentukan luas daerah lingkaran tersebut!</p>
+                            <div class="p-4 bg-amber-50 border-l-4 border-amber-400 rounded-r-2xl text-xs space-y-2 text-slate-700">
+                                <p><strong>1. Cari Jari-jari ($r$) menggunakan Keliling ($K$):</strong></p>
+                                <p>$$K = 2 \pi r \implies 44 = 2 \times \frac{22}{7} \times r$$</p>
+                                <p>$$44 = \frac{44}{7} \times r \implies r = 7\text{ cm}$$</p>
+                                <p><strong>2. Hitung Luas ($L$):</strong></p>
+                                <p>$$L = \pi r^2 = \frac{22}{7} \times 7 \times 7 = 154\text{ cm}^2$$</p>
+                            </div>
+                        </div>
+
+                        <!-- Dynamic Latihan Slides (Soal 1 - 10) -->
+                        
+                        <!-- Slide 20: Latihan 1 -->
+                        <div class="slide flex-col gap-4" id="slide-20">
+                            <span class="text-xs font-bold text-indigo-600 bg-indigo-50 px-2.5 py-1 rounded-full border border-indigo-200 self-start">📝 LATIHAN 1/10</span>
+                            <h3 class="heading-font text-xl md:text-2xl text-slate-900 font-extrabold">Keliling Taman Kota</h3>
+                            <p class="text-slate-500 text-sm">Taman kota berbentuk persegi panjang berukuran panjang $35\text{ m}$ dan lebar $20\text{ m}$. Berapa total panjang pagar kelilingnya?</p>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-3 max-w-md mx-auto my-3">
+                                <button onclick="checkPractice(1, 110, this)" class="p-4 rounded-xl border-2 border-slate-200 font-bold hover:border-violet-500 text-xs transition-all bg-white">110 meter</button>
+                                <button onclick="checkPractice(1, 700, this)" class="p-4 rounded-xl border-2 border-slate-200 font-bold hover:border-violet-500 text-xs transition-all bg-white">700 meter</button>
+                            </div>
+                            <div id="practFeedback-1" class="text-center font-bold text-xs mt-1"></div>
+                        </div>
+
+                        <!-- Slide 21: Latihan 2 -->
+                        <div class="slide flex-col gap-4" id="slide-21">
+                            <span class="text-xs font-bold text-indigo-600 bg-indigo-50 px-2.5 py-1 rounded-full border border-indigo-200 self-start">📝 LATIHAN 2/10</span>
+                            <h3 class="heading-font text-xl md:text-2xl text-slate-900 font-extrabold">Luas Segitiga Atap</h3>
+                            <p class="text-slate-500 text-sm">Sebuah ventilasi udara berbentuk segitiga memiliki panjang alas $24\text{ cm}$ dan tinggi $15\text{ cm}$. Berapakah luas permukaan ventilasi tersebut?</p>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-3 max-w-md mx-auto my-3">
+                                <button onclick="checkPractice(2, 360, this)" class="p-4 rounded-xl border-2 border-slate-200 font-bold hover:border-violet-500 text-xs transition-all bg-white">360 cm²</button>
+                                <button onclick="checkPractice(2, 180, this)" class="p-4 rounded-xl border-2 border-slate-200 font-bold hover:border-violet-500 text-xs transition-all bg-white">180 cm²</button>
+                            </div>
+                            <div id="practFeedback-2" class="text-center font-bold text-xs mt-1"></div>
+                        </div>
+
+                        <!-- Slide 22: Latihan 3 -->
+                        <div class="slide flex-col gap-4" id="slide-22">
+                            <span class="text-xs font-bold text-indigo-600 bg-indigo-50 px-2.5 py-1 rounded-full border border-indigo-200 self-start">📝 LATIHAN 3/10</span>
+                            <h3 class="heading-font text-xl md:text-2xl text-slate-900 font-extrabold">Luas Jajar Genjang</h3>
+                            <p class="text-slate-500 text-sm">Sebuah papan reklame berbentuk jajar genjang dengan panjang alas $15\text{ m}$ dan tinggi $8\text{ m}$. Berapakah luas papan tersebut?</p>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-3 max-w-md mx-auto my-3">
+                                <button onclick="checkPractice(3, 120, this)" class="p-4 rounded-xl border-2 border-slate-200 font-bold hover:border-violet-500 text-xs transition-all bg-white">120 m²</button>
+                                <button onclick="checkPractice(3, 60, this)" class="p-4 rounded-xl border-2 border-slate-200 font-bold hover:border-violet-500 text-xs transition-all bg-white">60 m²</button>
+                            </div>
+                            <div id="practFeedback-3" class="text-center font-bold text-xs mt-1"></div>
+                        </div>
+
+                        <!-- Slide 23: Latihan 4 -->
+                        <div class="slide flex-col gap-4" id="slide-23">
+                            <span class="text-xs font-bold text-indigo-600 bg-indigo-50 px-2.5 py-1 rounded-full border border-indigo-200 self-start">📝 LATIHAN 4/10</span>
+                            <h3 class="heading-font text-xl md:text-2xl text-slate-900 font-extrabold">Diagonal Belah Ketupat</h3>
+                            <p class="text-slate-500 text-sm">Suatu belah ketupat memiliki panjang diagonal $d_1 = 16\text{ cm}$ dan $d_2 = 12\text{ cm}$. Berapakah luas belah ketupat tersebut?</p>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-3 max-w-md mx-auto my-3">
+                                <button onclick="checkPractice(4, 96, this)" class="p-4 rounded-xl border-2 border-slate-200 font-bold hover:border-violet-500 text-xs transition-all bg-white">96 cm²</button>
+                                <button onclick="checkPractice(4, 192, this)" class="p-4 rounded-xl border-2 border-slate-200 font-bold hover:border-violet-500 text-xs transition-all bg-white">192 cm²</button>
+                            </div>
+                            <div id="practFeedback-4" class="text-center font-bold text-xs mt-1"></div>
+                        </div>
+
+                        <!-- Slide 24: Latihan 5 -->
+                        <div class="slide flex-col gap-4" id="slide-24">
+                            <span class="text-xs font-bold text-indigo-600 bg-indigo-50 px-2.5 py-1 rounded-full border border-indigo-200 self-start">📝 LATIHAN 5/10</span>
+                            <h3 class="heading-font text-xl md:text-2xl text-slate-900 font-extrabold">Luas Trapesium</h3>
+                            <p class="text-slate-500 text-sm">Trapesium sama kaki memiliki panjang sisi-sisi sejajar $18\text{ cm}$ dan $12\text{ cm}$. Jika tinggi trapesium tersebut adalah $10\text{ cm}$, hitunglah luasnya!</p>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-3 max-w-md mx-auto my-3">
+                                <button onclick="checkPractice(5, 150, this)" class="p-4 rounded-xl border-2 border-slate-200 font-bold hover:border-violet-500 text-xs transition-all bg-white">150 cm²</button>
+                                <button onclick="checkPractice(5, 300, this)" class="p-4 rounded-xl border-2 border-slate-200 font-bold hover:border-violet-500 text-xs transition-all bg-white">300 cm²</button>
+                            </div>
+                            <div id="practFeedback-5" class="text-center font-bold text-xs mt-1"></div>
+                        </div>
+
+                        <!-- Slide 25: Latihan 6 -->
+                        <div class="slide flex-col gap-4" id="slide-25">
+                            <span class="text-xs font-bold text-indigo-600 bg-indigo-50 px-2.5 py-1 rounded-full border border-indigo-200 self-start">📝 LATIHAN 6/10</span>
+                            <h3 class="heading-font text-xl md:text-2xl text-slate-900 font-extrabold">Layanan Rumput Lapangan</h3>
+                            <p class="text-slate-500 text-sm">Sebuah lapangan bola berbentuk persegi panjang berukuran $50\text{ m} \times 30\text{ m}$ akan ditanami rumput hias dengan biaya Rp20.000 per meter persegi. Hitunglah biaya total penanaman rumput tersebut!</p>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-3 max-w-md mx-auto my-3">
+                                <button onclick="checkPractice(6, 30000000, this)" class="p-4 rounded-xl border-2 border-slate-200 font-bold hover:border-violet-500 text-xs transition-all bg-white">Rp30.000.000</button>
+                                <button onclick="checkPractice(6, 15000000, this)" class="p-4 rounded-xl border-2 border-slate-200 font-bold hover:border-violet-500 text-xs transition-all bg-white">Rp15.000.000</button>
+                            </div>
+                            <div id="practFeedback-6" class="text-center font-bold text-xs mt-1"></div>
+                        </div>
+
+                        <!-- Slide 26: Latihan 7 -->
+                        <div class="slide flex-col gap-4" id="slide-26">
+                            <span class="text-xs font-bold text-indigo-600 bg-indigo-50 px-2.5 py-1 rounded-full border border-indigo-200 self-start">📝 LATIHAN 7/10</span>
+                            <h3 class="heading-font text-xl md:text-2xl text-slate-900 font-extrabold">Putaran Roda Sepeda</h3>
+                            <p class="text-slate-500 text-sm">Roda sebuah sepeda memiliki jari-jari $14\text{ cm}$. Jika roda berputar sebanyak $100$ kali pada jalan lurus, hitunglah jarak total yang ditempuh sepeda! (Gunakan $\pi = \frac{22}{7}$)</p>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-3 max-w-md mx-auto my-3">
+                                <button onclick="checkPractice(7, 88, this)" class="p-4 rounded-xl border-2 border-slate-200 font-bold hover:border-violet-500 text-xs transition-all bg-white">88 meter</button>
+                                <button onclick="checkPractice(7, 616, this)" class="p-4 rounded-xl border-2 border-slate-200 font-bold hover:border-violet-500 text-xs transition-all bg-white">61.6 meter</button>
+                            </div>
+                            <div id="practFeedback-7" class="text-center font-bold text-xs mt-1"></div>
+                        </div>
+
+                        <!-- Slide 27: Latihan 8 -->
+                        <div class="slide flex-col gap-4" id="slide-27">
+                            <span class="text-xs font-bold text-indigo-600 bg-indigo-50 px-2.5 py-1 rounded-full border border-indigo-200 self-start">📝 LATIHAN 8/10</span>
+                            <h3 class="heading-font text-xl md:text-2xl text-slate-900 font-extrabold">Desain Kerangka Layang-layang</h3>
+                            <p class="text-slate-500 text-sm">Beni ingin membuat layang-layang dengan panjang diagonal $30\text{ cm}$ dan $20\text{ cm}$. Berapa luas kertas minimal yang dibutuhkan Beni untuk menutup permukaan layang-layang tersebut?</p>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-3 max-w-md mx-auto my-3">
+                                <button onclick="checkPractice(8, 300, this)" class="p-4 rounded-xl border-2 border-slate-200 font-bold hover:border-violet-500 text-xs transition-all bg-white">300 cm²</button>
+                                <button onclick="checkPractice(8, 600, this)" class="p-4 rounded-xl border-2 border-slate-200 font-bold hover:border-violet-500 text-xs transition-all bg-white">600 cm²</button>
+                            </div>
+                            <div id="practFeedback-8" class="text-center font-bold text-xs mt-1"></div>
+                        </div>
+
+                        <!-- Slide 28: Latihan 9 -->
+                        <div class="slide flex-col gap-4" id="slide-28">
+                            <span class="text-xs font-bold text-indigo-600 bg-indigo-50 px-2.5 py-1 rounded-full border border-indigo-200 self-start">📝 LATIHAN 9/10</span>
+                            <h3 class="heading-font text-xl md:text-2xl text-slate-900 font-extrabold">Tantangan Daerah yang Diarsir</h3>
+                            <p class="text-slate-500 text-sm">Sebuah persegi panjang berukuran $14\text{ cm} \times 10\text{ cm}$ di dalamnya memiliki lubang berbentuk setengah lingkaran dengan diameter sepanjang $14\text{ cm}$. Berapakah luas daerah yang tersisa (diarsir)? (Gunakan $\pi = \frac{22}{7}$)</p>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-3 max-w-md mx-auto my-3">
+                                <button onclick="checkPractice(9, 63, this)" class="p-4 rounded-xl border-2 border-slate-200 font-bold hover:border-violet-500 text-xs transition-all bg-white">63 cm²</button>
+                                <button onclick="checkPractice(9, 140, this)" class="p-4 rounded-xl border-2 border-slate-200 font-bold hover:border-violet-500 text-xs transition-all bg-white">140 cm²</button>
+                            </div>
+                            <div id="practFeedback-9" class="text-center font-bold text-xs mt-1"></div>
+                        </div>
+
+                        <!-- Slide 29: Latihan 10 -->
+                        <div class="slide flex-col gap-4" id="slide-29">
+                            <span class="text-xs font-bold text-indigo-600 bg-indigo-50 px-2.5 py-1 rounded-full border border-indigo-200 self-start">📝 LATIHAN 10/10</span>
+                            <h3 class="heading-font text-xl md:text-2xl text-slate-900 font-extrabold">Optimalisasi Kandang Ayam</h3>
+                            <p class="text-slate-500 text-sm">Pak Budi memiliki pagar kawat sepanjang $40\text{ m}$ untuk memagar kandang ayamnya. Manakah dimensi panjang dan lebar yang harus ia pilih agar kandang ayamnya berukuran seluas mungkin?</p>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-3 max-w-md mx-auto my-3">
+                                <button onclick="checkPractice(10, 'persegi', this)" class="p-4 rounded-xl border-2 border-slate-200 font-bold hover:border-violet-500 text-xs transition-all bg-white">Bentuk Persegi: 10 m × 10 m (Luas = 100 m²)</button>
+                                <button onclick="checkPractice(10, 'panjang', this)" class="p-4 rounded-xl border-2 border-slate-200 font-bold hover:border-violet-500 text-xs transition-all bg-white">Bentuk Panjang: 15 m × 5 m (Luas = 75 m²)</button>
+                            </div>
+                            <div id="practFeedback-10" class="text-center font-bold text-xs mt-1"></div>
+                        </div>
+
+                        <!-- Slide 30: Scratchpad Workspace -->
+                        <div class="slide flex-col gap-4" id="slide-30">
+                            <h3 class="heading-font text-2xl text-slate-900 font-extrabold">✏️ Workspace: Papan Cakar Eksplorasi</h3>
+                            <p class="text-slate-500 text-sm">Silakan coret-coret di bawah ini untuk menghitung secara leluasa kapan pun kamu mau!</p>
+                            <div class="flex gap-2 justify-center items-center">
+                                <button onclick="setScratchColor('#1e293b')" class="w-6 h-6 rounded-full bg-slate-800 border-2 border-white cursor-pointer" id="col-slate"></button>
+                                <button onclick="setScratchColor('#dc2626')" class="w-6 h-6 rounded-full bg-rose-600 border-2 border-white cursor-pointer" id="col-red"></button>
+                                <button onclick="setScratchColor('#2563eb')" class="w-6 h-6 rounded-full bg-blue-600 border-2 border-white cursor-pointer" id="col-blue"></button>
+                                <button onclick="clearCanvas()" class="text-xs bg-slate-100 hover:bg-slate-200 px-3 py-1 rounded-xl border font-bold">Bersihkan Papan</button>
+                            </div>
+                            <div class="bg-slate-50 border-2 border-slate-200 rounded-2xl overflow-hidden h-72 shadow-inner">
+                                <canvas id="scratchCanvas" class="w-full h-full bg-slate-50"></canvas>
+                            </div>
+                        </div>
+
+                        <!-- Slide 31: Reflection 1 -->
+                        <div class="slide flex-col gap-4" id="slide-31">
+                            <h3 class="heading-font text-2xl text-slate-900 font-extrabold">🧠 Jurnal Refleksi: Bagian Paling Menantang</h3>
+                            <p class="text-slate-500 text-sm">Menurutmu, bagian mana dari petualangan asal-usul rumus yang paling menantang sekaligus menyenangkan?</p>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-3 my-2">
+                                <div onclick="saveReflection(1, 'Asal-usul Lingkaran dengan Pizza', this)" class="p-4 bg-slate-50 border-2 border-slate-200 hover:border-violet-500 rounded-2xl cursor-pointer transition-all">
+                                    <span class="text-2xl block">🍕</span>
+                                    <h4 class="font-bold text-sm text-slate-800 mt-2">Sektor Lingkaran</h4>
+                                    <p class="text-[11px] text-slate-400 mt-0.5">Memotong lingkaran menjadi persegi panjang.</p>
+                                </div>
+                                <div onclick="saveReflection(1, 'Translasi Jajar Genjang', this)" class="p-4 bg-slate-50 border-2 border-slate-200 hover:border-violet-500 rounded-2xl cursor-pointer transition-all">
+                                    <span class="text-2xl block">🔄</span>
+                                    <h4 class="font-bold text-sm text-slate-800 mt-2">Translasi Segitiga</h4>
+                                    <p class="text-[11px] text-slate-400 mt-0.5">Memindahkan siku-siku jajar genjang ke sisi kanan.</p>
+                                </div>
+                            </div>
+                            <div id="reflect-1-fb" class="text-center font-bold text-violet-600 text-xs"></div>
+                        </div>
+
+                        <!-- Slide 32: Reflection 2 -->
+                        <div class="slide flex-col gap-4" id="slide-32">
+                            <h3 class="heading-font text-2xl text-slate-900 font-extrabold">🧠 Jurnal Refleksi: Tingkat Pemahaman Mandiri</h3>
+                            <p class="text-slate-500 text-sm">Seberapa yakin kamu dalam menjelaskan kembali asal-usul rumus luas bangun datar kepada teman sebangkumu?</p>
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-3 my-2">
+                                <div onclick="saveReflection(2, 'Sangat Yakin', this)" class="p-4 bg-slate-50 border-2 border-slate-200 hover:border-violet-500 rounded-2xl cursor-pointer text-center transition-all">
+                                    <span class="text-2xl block">🔥</span>
+                                    <h4 class="font-bold text-sm text-slate-800 mt-1">Sangat Yakin</h4>
+                                </div>
+                                <div onclick="saveReflection(2, 'Cukup Yakin', this)" class="p-4 bg-slate-50 border-2 border-slate-200 hover:border-violet-500 rounded-2xl cursor-pointer text-center transition-all">
+                                    <span class="text-2xl block">🙂</span>
+                                    <h4 class="font-bold text-sm text-slate-800 mt-1">Cukup Yakin</h4>
+                                </div>
+                                <div onclick="saveReflection(2, 'Butuh Review', this)" class="p-4 bg-slate-50 border-2 border-slate-200 hover:border-violet-500 rounded-2xl cursor-pointer text-center transition-all">
+                                    <span class="text-2xl block">📖</span>
+                                    <h4 class="font-bold text-sm text-slate-800 mt-1">Butuh Review</h4>
+                                </div>
+                            </div>
+                            <div id="reflect-2-fb" class="text-center font-bold text-violet-600 text-xs"></div>
+                        </div>
+
+                        <!-- Slide 33: Summary Diagram -->
+                        <div class="slide flex-col gap-4" id="slide-33">
+                            <h3 class="heading-font text-2xl text-slate-900 font-extrabold">📌 Peta Hubungan Rumus</h3>
+                            <p class="text-slate-500 text-sm">Ingat, hampir semua rumus luas bangun datar berawal dari dekonstruksi bentuk <strong>Persegi Panjang</strong>!</p>
+                            <div class="p-4 bg-slate-50 border border-slate-200 rounded-2xl text-xs space-y-2 leading-relaxed text-slate-700">
+                                <p>1. <strong>Persegi Panjang</strong> $= p \times l$ (Pondasi Utama)</p>
+                                <p>2. <strong>Segitiga</strong> $= \frac{1}{2} \times$ Persegi Panjang (Alas $\times$ Tinggi)</p>
+                                <p>3. <strong>Jajar Genjang</strong> $=$ Geser sisi segitiga agar membentuk Persegi Panjang</p>
+                                <p>4. <strong>Trapesium</strong> $=$ Gabungan / translasi menjadi Jajar Genjang dengan tinggi $\frac{1}{2}t$</p>
+                                <p>5. <strong>Belah Ketupat &amp; Layang-layang</strong> $=$ Setengah dari luas Persegi Panjang pembungkusnya</p>
+                            </div>
+                        </div>
+
+                        <!-- Slide 34: Cognitive Status Gate -->
+                        <div class="slide flex-col items-center text-center gap-4" id="slide-34">
+                            <div class="w-24 h-24 bg-indigo-50 rounded-full flex items-center justify-center text-5xl border border-indigo-100">🛡️</div>
+                            <h3 class="heading-font text-2xl text-slate-900 font-extrabold">Pintu Keluar Kognitif Terbuka!</h3>
+                            <p class="text-slate-500 text-sm max-w-md">
+                                Kamu telah membuktikan kecerdasan belajarmu dengan melewati 34 halaman penuh petualangan geometri. Satu langkah lagi untuk mencetak sertifikat akademikmu!
+                            </p>
+                            <button onclick="revealCertificate()" class="bg-violet-600 hover:bg-violet-700 text-white font-extrabold py-3 px-8 rounded-2xl shadow-lg shadow-violet-200 active:scale-95 transition-all text-sm">
+                                Ambil Sertifikat Kelulusan 📜
+                            </button>
+                        </div>
+
+                        <!-- Slide 35: Certificate of Completion -->
+                        <div class="slide flex-col items-center text-center gap-6" id="slide-35">
+                            <div class="border-8 double border-amber-400 p-8 rounded-3xl bg-amber-50/40 shadow-xl max-w-xl w-full relative overflow-hidden">
+                                <div class="absolute top-0 right-0 w-16 h-16 bg-amber-200/50 rounded-bl-full flex items-center justify-center text-xl">🏆</div>
+                                <h2 class="heading-font text-2xl text-amber-800 font-extrabold tracking-wider">CERTIFICATE OF COMPLETION</h2>
+                                <p class="text-[10px] text-slate-500 uppercase font-black mt-2 tracking-widest">Dianugerahkan Kepada</p>
+                                <h3 class="text-2xl text-slate-800 font-bold heading-font my-2">GEOMETRIC EXPLORER MASTER</h3>
+                                <p class="text-xs text-slate-600 max-w-md mx-auto leading-relaxed">
+                                    Atas keberhasilan luar biasa menguasai sejarah, asal-usul rumus, keliling, dan luas bangun datar tingkat lanjut sesuai panduan kurikulum matematika SMP.
+                                </p>
+                                <div class="border-t border-amber-200 mt-6 pt-4 text-[9px] text-slate-400 font-mono">
+                                    VERIFIED SECURELY BY GEOMETRIC ENGINE CORE 2026
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- Bottom Nav Controls inside the card wrapper -->
+                    <div class="flex justify-between items-center mt-6 pt-6 border-t border-slate-100">
+                        <button id="prevBtn" onclick="changeSlide(-1)" class="bg-slate-100 text-slate-600 font-bold py-2.5 px-6 rounded-xl hover:bg-slate-200 active:scale-95 transition-all text-xs" disabled>
+                            Sebelumnya
+                        </button>
+                        <button id="nextBtn" onclick="changeSlide(1)" class="bg-violet-600 text-white font-black py-2.5 px-8 rounded-xl hover:bg-violet-700 active:scale-95 transition-all text-xs">
+                            Berikutnya
+                        </button>
+                    </div>
+
+                </div>
+            </section>
+
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="w-full bg-slate-900 text-slate-500 py-4 text-center text-xs mt-12 border-t-4 border-violet-600 font-mono">
+        Geometric Explorer • Kurikulum Merdeka • Kelas VII SMP
+    </footer>
+
+    <!-- Simple Dynamic Tone Synthesis -->
+    <script>
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        function playTone(freq, type, duration) {
+            try {
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = type;
+                osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+                gain.gain.setValueAtTime(0.08, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start();
+                osc.stop(audioCtx.currentTime + duration);
+            } catch (e) {
+                console.log("Audio context pending click event.");
+            }
+        }
+        function soundSuccess() {
+            playTone(523.25, 'sine', 0.15); // C5
+            setTimeout(() => playTone(659.25, 'sine', 0.25), 100); // E5
+        }
+        function soundFail() {
+            playTone(220, 'triangle', 0.3); // A3
+        }
+        function soundLevelUp() {
+            playTone(523.25, 'sine', 0.1);
+            setTimeout(() => playTone(659.25, 'sine', 0.1), 80);
+            setTimeout(() => playTone(783.99, 'sine', 0.1), 160);
+            setTimeout(() => playTone(1046.50, 'sine', 0.4), 240);
+        }
+    </script>
+
+    <!-- Custom Dialog Modal System -->
+    <div id="customAlert" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm hidden items-center justify-center p-4 z-50">
+        <div class="bg-white rounded-3xl p-6 max-w-sm w-full border-4 border-violet-100 shadow-2xl text-center flex flex-col gap-4">
+            <div id="alertIcon" class="text-4xl">⚠️</div>
+            <h4 id="alertTitle" class="heading-font font-bold text-lg text-slate-800">Sistem Alert</h4>
+            <p id="alertMsg" class="text-xs text-slate-500 leading-relaxed"></p>
+            <button onclick="closeAlert()" class="bg-violet-600 hover:bg-violet-700 text-white font-bold py-2.5 rounded-xl text-xs transition-all w-full">Kembali</button>
+        </div>
+    </div>
+
+    <!-- MAIN JAVASCRIPT APPLICATION LOGIC -->
+    <script>
+        let currentSlide = 1;
+        const totalSlides = 35;
+        let score = 100;
+
+        // Custom alert control
+        function triggerAlert(title, message, icon = '⚠️') {
+            document.getElementById('alertIcon').innerText = icon;
+            document.getElementById('alertTitle').innerText = title;
+            document.getElementById('alertMsg').innerText = message;
+            const modal = document.getElementById('customAlert');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+        function closeAlert() {
+            document.getElementById('customAlert').classList.add('hidden');
+            document.getElementById('customAlert').classList.remove('flex');
+        }
+
+        // Update active slide and indicators
+        function updateUI() {
+            // Hide all slides
+            for (let i = 1; i <= totalSlides; i++) {
+                const s = document.getElementById('slide-' + i);
+                if (s) s.classList.remove('active');
+            }
+
+            // Show active
+            const activeS = document.getElementById('slide-' + currentSlide);
+            if (activeS) {
+                activeS.classList.add('active');
+            }
+
+            // Update top bar indicators
+            document.getElementById('pageIndicator').innerText = `HALAMAN: ${currentSlide} / ${totalSlides}`;
+            document.getElementById('progressBar').style.width = `${(currentSlide / totalSlides) * 100}%`;
+
+            // Toggle prevBtn disable state
+            document.getElementById('prevBtn').disabled = (currentSlide === 1);
+            
+            // Adjust next button text at the final screen
+            if (currentSlide === totalSlides) {
+                document.getElementById('nextBtn').innerText = "SELESAI 🎉";
+                document.getElementById('nextBtn').disabled = true;
+            } else {
+                document.getElementById('nextBtn').innerText = "Berikutnya";
+                document.getElementById('nextBtn').disabled = false;
+            }
+
+            // Fire KaTeX renderer to parse math formulas inside the active slide
+            renderMath();
+        }
+
+        function changeSlide(direction) {
+            currentSlide += direction;
+            if (currentSlide < 1) currentSlide = 1;
+            if (currentSlide > totalSlides) currentSlide = totalSlides;
+            updateUI();
+        }
+
+        // --- MATH ENGINES (KaTeX auto renderer) ---
+        function renderMath() {
+            if (typeof renderMathInElement !== 'undefined') {
+                renderMathInElement(document.body, {
+                    delimiters: [
+                        {left: '$$', right: '$$', display: true},
+                        {left: '$', right: '$', display: false},
+                        {left: '\\(', right: '\\)', display: false},
+                        {left: '\\[', right: '\\]', display: true}
+                    ],
+                    throwOnError : false
+                });
+            }
+        }
+
+        // --- Question Validators ---
+        function checkWarmup(id, answer, btn) {
+            const fb = document.getElementById(`wuFeedback-${id}`);
+            let isCorrect = false;
+
+            if (id === 1 && answer === 12) isCorrect = true;
+            if (id === 2 && answer === 24) isCorrect = true;
+            if (id === 3 && answer === 30) isCorrect = true;
+            if (id === 4 && answer === 'sama') isCorrect = true;
+
+            if (isCorrect) {
+                soundSuccess();
+                fb.innerHTML = "🎯 BENAR! Kejelian geometris tingkat tinggimu terbukti!";
+                fb.className = "text-center font-bold text-xs mt-1 text-emerald-600 animate-bounce";
+                score += 15;
+                document.getElementById('xpDisplay').innerText = score;
+            } else {
+                soundFail();
+                fb.innerHTML = "❌ Kurang tepat. Gunakan insting spasialmu dan coba hitung kembali!";
+                fb.className = "text-center font-bold text-xs mt-1 text-rose-500";
+            }
+        }
+
+        function checkPractice(id, answer, btn) {
+            const fb = document.getElementById(`practFeedback-${id}`);
+            let isCorrect = false;
+
+            if (id === 1 && answer === 110) isCorrect = true;
+            if (id === 2 && answer === 180) isCorrect = true;
+            if (id === 3 && answer === 120) isCorrect = true;
+            if (id === 4 && answer === 96) isCorrect = true;
+            if (id === 5 && answer === 150) isCorrect = true;
+            if (id === 6 && answer === 30000000) isCorrect = true;
+            if (id === 7 && answer === 88) isCorrect = true;
+            if (id === 8 && answer === 300) isCorrect = true;
+            if (id === 9 && answer === 63) isCorrect = true;
+            if (id === 10 && answer === 'persegi') isCorrect = true;
+
+            if (isCorrect) {
+                soundSuccess();
+                fb.innerHTML = "🎯 HEBAT! Jawabanmu benar, logikamu sangat tajam!";
+                fb.className = "text-center font-bold text-xs mt-1 text-emerald-600 animate-bounce";
+                score += 25;
+                document.getElementById('xpDisplay').innerText = score;
+            } else {
+                soundFail();
+                fb.innerHTML = "❌ Kurang tepat. Ingat konsep asal-usul rumusnya dan mari coba lagi!";
+                fb.className = "text-center font-bold text-xs mt-1 text-rose-500";
+            }
+        }
+
+        function saveReflection(id, val, card) {
+            const fb = document.getElementById(`reflect-${id}-fb`);
+            soundSuccess();
+            fb.innerHTML = `Disimpan! Pilihanmu: <strong>"${val}"</strong>. Metakognisimu sangat baik untuk mendukung perkembangan belajarmu!`;
+        }
+
+        function revealCertificate() {
+            soundLevelUp();
+            currentSlide = 35;
+            updateUI();
+            triggerAlert('SELAMAT!', 'Kamu telah dianugerahi sertifikat Geometric Explorer Master!', '🏆');
+        }
+
+        // --- SCRATCHPAD WHITEBOARD WORKSPACE ---
+        const canvas = document.getElementById('scratchCanvas');
+        const ctx = canvas.getContext('2d');
+        let isDrawing = false;
+        let lastX = 0;
+        let lastY = 0;
+        let strokeColor = '#1e293b';
+
+        function resizeCanvas() {
+            const rect = canvas.parentNode.getBoundingClientRect();
+            canvas.width = rect.width;
+            canvas.height = rect.height;
+            ctx.lineJoin = 'round';
+            ctx.lineCap = 'round';
+            ctx.lineWidth = 3;
+            ctx.strokeStyle = strokeColor;
+        }
+
+        function setScratchColor(hex) {
+            strokeColor = hex;
+            ctx.strokeStyle = hex;
+        }
+
+        function clearCanvas() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+        }
+
+        function startDrawing(e) {
+            isDrawing = true;
+            getCoords(e);
+        }
+
+        function draw(e) {
+            if (!isDrawing) return;
+            e.preventDefault();
+            const currentCoords = getCoords(e);
+            ctx.beginPath();
+            ctx.moveTo(lastX, lastY);
+            ctx.lineTo(currentCoords.x, currentCoords.y);
+            ctx.stroke();
+            lastX = currentCoords.x;
+            lastY = currentCoords.y;
+        }
+
+        function stopDrawing() {
+            isDrawing = false;
+        }
+
+        function getCoords(e) {
+            const rect = canvas.getBoundingClientRect();
+            let clientX, clientY;
+            if (e.touches && e.touches.length > 0) {
+                clientX = e.touches[0].clientX;
+                clientY = e.touches[0].clientY;
+            } else {
+                clientX = e.clientX;
+                clientY = e.clientY;
+            }
+            const x = clientX - rect.left;
+            const y = clientY - rect.top;
+            if (!isDrawing) {
+                lastX = x;
+                lastY = y;
+            }
+            return { x, y };
+        }
+
+        canvas.addEventListener('mousedown', startDrawing);
+        canvas.addEventListener('mousemove', draw);
+        canvas.addEventListener('mouseup', stopDrawing);
+        canvas.addEventListener('mouseout', stopDrawing);
+        canvas.addEventListener('touchstart', startDrawing);
+        canvas.addEventListener('touchmove', draw);
+        canvas.addEventListener('touchend', stopDrawing);
+
+        window.onload = function() {
+            updateUI();
+            setTimeout(resizeCanvas, 300);
+        }
+    </script>
+</body>
+</html>

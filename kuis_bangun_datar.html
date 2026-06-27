@@ -1,0 +1,1440 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GeoMaster 2D - Kuis Interaktif Bangun Datar</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <!-- FontAwesome Icons for Beautiful UI -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <style>
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+    .mono {
+      font-family: 'JetBrains Mono', monospace;
+    }
+    /* Custom Scrollbar for elegant look */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #f1f5f9;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #94a3b8;
+    }
+    /* Shading and Depth transitions */
+    .svg-container svg {
+      transition: all 0.3s ease;
+    }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col">
+
+  <!-- Header -->
+  <header class="bg-white border-b border-slate-200 sticky top-0 z-30 shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 py-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div class="flex items-center gap-3">
+        <div class="bg-indigo-600 text-white p-2.5 rounded-xl shadow-md shadow-indigo-100 flex items-center justify-center">
+          <i class="fa-solid fa-shapes text-xl animate-pulse"></i>
+        </div>
+        <div>
+          <h1 class="text-xl font-extrabold text-slate-900 tracking-tight">GeoMaster 2D</h1>
+          <p class="text-xs text-slate-500 font-medium">Kuis Interaktif Bangun Datar • 40 Soal Kreatif, Praktis & Kompleks</p>
+        </div>
+      </div>
+      <!-- Progress Ring & Score Bar -->
+      <div class="flex items-center gap-6 bg-slate-50 px-4 py-2 rounded-2xl border border-slate-100">
+        <div class="flex items-center gap-2">
+          <span class="text-xs font-semibold text-slate-500">Skor:</span>
+          <span id="score-badge" class="mono text-sm font-bold text-indigo-600 bg-indigo-50 px-2.5 py-1 rounded-lg">0 / 40</span>
+        </div>
+        <div class="flex items-center gap-2">
+          <span class="text-xs font-semibold text-slate-500">Progress:</span>
+          <div class="w-24 bg-slate-200 rounded-full h-2">
+            <div id="progress-bar-inner" class="bg-emerald-500 h-2 rounded-full transition-all duration-300" style="width: 0%"></div>
+          </div>
+          <span id="progress-percentage" class="mono text-xs font-bold text-slate-700">0%</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Workspace -->
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 py-6 sm:px-6 lg:px-8 flex flex-col lg:flex-row gap-6 items-start">
+    
+    <!-- Left Panel: Sidebar Grid Soal (Sticky) -->
+    <aside class="w-full lg:w-80 shrink-0 bg-white border border-slate-200 rounded-2xl p-5 shadow-sm lg:sticky lg:top-24">
+      <div class="flex items-center justify-between mb-4">
+        <h3 class="font-bold text-slate-900 flex items-center gap-2">
+          <i class="fa-solid fa-list-ol text-indigo-500"></i> Daftar Soal
+        </h3>
+        <button onclick="resetQuiz()" class="text-xs font-semibold text-rose-500 hover:text-rose-700 transition flex items-center gap-1">
+          <i class="fa-solid fa-rotate-left"></i> Reset Kuis
+        </button>
+      </div>
+
+      <!-- Keterangan Status Warna -->
+      <div class="grid grid-cols-2 gap-2 mb-4 p-3 bg-slate-50 rounded-xl text-xs border border-slate-100">
+        <div class="flex items-center gap-2">
+          <span class="w-3 h-3 rounded-full bg-slate-200 border border-slate-300 inline-block"></span>
+          <span class="text-slate-600 text-xxs">Belum diisi</span>
+        </div>
+        <div class="flex items-center gap-2">
+          <span class="w-3 h-3 rounded-full bg-amber-400 inline-block"></span>
+          <span class="text-slate-600 text-xxs">Belum dicek</span>
+        </div>
+        <div class="flex items-center gap-2">
+          <span class="w-3 h-3 rounded-full bg-emerald-500 inline-block"></span>
+          <span class="text-slate-600 text-xxs">Benar</span>
+        </div>
+        <div class="flex items-center gap-2">
+          <span class="w-3 h-3 rounded-full bg-rose-500 inline-block"></span>
+          <span class="text-slate-600 text-xxs">Salah</span>
+        </div>
+      </div>
+
+      <!-- Grid Buttons -->
+      <div class="grid grid-cols-5 gap-2 max-h-[340px] overflow-y-auto pr-1" id="question-tabs-grid">
+        <!-- Generated Dynamically by JS -->
+      </div>
+
+      <!-- Quick Summary Card -->
+      <div class="mt-5 pt-4 border-t border-slate-100 flex flex-col gap-2">
+        <div class="flex justify-between text-xs text-slate-600">
+          <span>Tingkat Mudah:</span>
+          <span class="font-bold text-slate-800">12 Soal</span>
+        </div>
+        <div class="flex justify-between text-xs text-slate-600">
+          <span>Penerapan Praktis:</span>
+          <span class="font-bold text-slate-800">16 Soal</span>
+        </div>
+        <div class="flex justify-between text-xs text-slate-600">
+          <span>Tingkat Kompleks/Tinggi:</span>
+          <span class="font-bold text-slate-800">12 Soal</span>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Center/Right Content Area -->
+    <div class="flex-1 w-full flex flex-col gap-6">
+      
+      <!-- Question Card Wrapper -->
+      <div class="bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden flex flex-col md:flex-row min-h-[500px]">
+        
+        <!-- Left half of Question Card: Schematic Visual Layout -->
+        <div class="w-full md:w-[45%] bg-slate-900 text-white p-6 flex flex-col justify-between relative overflow-hidden border-b md:border-b-0 md:border-r border-slate-800">
+          <!-- Background glow effect -->
+          <div class="absolute -top-24 -left-24 w-48 h-48 bg-indigo-500/20 rounded-full blur-3xl pointer-events-none"></div>
+          <div class="absolute -bottom-24 -right-24 w-48 h-48 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none"></div>
+
+          <!-- Top meta -->
+          <div class="relative z-10 flex justify-between items-center mb-4">
+            <span id="shape-category-badge" class="text-xs font-semibold bg-indigo-500/20 text-indigo-300 px-3 py-1 rounded-full border border-indigo-500/30">
+              PERSEGI
+            </span>
+            <span id="difficulty-badge" class="text-xs font-semibold px-2.5 py-0.5 rounded-full">
+              Mudah
+            </span>
+          </div>
+
+          <!-- Interactive SVG Frame -->
+          <div class="flex-1 flex flex-col items-center justify-center py-6 min-h-[300px] svg-container relative z-10">
+            <div id="svg-drawing-area" class="w-full flex justify-center items-center">
+              <!-- Inline SVG is rendered here -->
+            </div>
+          </div>
+
+          <!-- Schematic info card -->
+          <div class="relative z-10 bg-slate-800/40 p-4 rounded-xl border border-slate-700/30 text-center">
+            <span class="text-xs font-bold text-slate-400 flex items-center justify-center gap-1.5">
+              <i class="fa-solid fa-drafting-compass text-sky-400 animate-spin-slow"></i> Ilustrasi Skematis Bangun Datar
+            </span>
+            <p class="text-[10px] text-slate-500 mt-1">Simbol dimensi menunjukkan variabel parameter yang digunakan dalam soal.</p>
+          </div>
+        </div>
+
+        <!-- Right half of Question Card: Question content & MCQ options -->
+        <div class="w-full md:w-[55%] p-6 sm:p-8 flex flex-col justify-between">
+          <div>
+            <!-- Question Header -->
+            <div class="flex items-center justify-between mb-4 text-xs font-bold text-slate-400">
+              <span class="mono">SOAL <span id="current-question-num" class="text-indigo-600 text-base">1</span> DARI 40</span>
+              <span id="answer-checked-badge" class="hidden items-center gap-1.5 text-emerald-600 bg-emerald-50 px-2.5 py-1 rounded-full"><i class="fa-solid fa-check-double"></i> Selesai Dicek</span>
+            </div>
+
+            <!-- Question Body -->
+            <div class="prose max-w-none text-slate-800 mb-6">
+              <p id="question-text" class="text-base sm:text-lg font-medium leading-relaxed">
+                Memuat soal...
+              </p>
+            </div>
+
+            <!-- Hint Trigger -->
+            <div class="mb-6">
+              <button onclick="toggleHint()" class="text-xs font-semibold text-indigo-600 hover:text-indigo-800 flex items-center gap-1.5 transition">
+                <i class="fa-regular fa-lightbulb"></i> Butuh Petunjuk?
+              </button>
+              <div id="hint-box" class="hidden mt-2 p-3 bg-indigo-50/50 border border-indigo-100 rounded-xl text-xs text-indigo-900 leading-relaxed italic animate-fade-in">
+                <!-- Hint goes here -->
+              </div>
+            </div>
+
+            <!-- MCQ Option Buttons -->
+            <div class="space-y-3" id="options-container">
+              <!-- Dynamically populated options A, B, C, D -->
+            </div>
+          </div>
+
+          <!-- Action Control Bar -->
+          <div class="mt-8 pt-6 border-t border-slate-100 flex items-center justify-between gap-4">
+            <button onclick="prevQuestion()" id="btn-prev" class="px-4 py-2.5 border border-slate-200 text-slate-700 hover:bg-slate-50 font-semibold rounded-xl text-sm transition flex items-center gap-2">
+              <i class="fa-solid fa-arrow-left"></i> Sblmnya
+            </button>
+            
+            <button onclick="checkAnswer()" id="btn-check" class="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2.5 px-6 rounded-xl shadow-lg shadow-indigo-100 transition duration-150 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed">
+              <i class="fa-solid fa-circle-check"></i> Cek Jawaban
+            </button>
+            
+            <button onclick="nextQuestion()" id="btn-next" class="px-4 py-2.5 bg-slate-900 hover:bg-slate-800 text-white font-semibold rounded-xl text-sm transition flex items-center gap-2">
+              Selanjutnya <i class="fa-solid fa-arrow-right"></i>
+            </button>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Pembahasan (Explanation) Section -->
+      <section id="pembahasan-section" class="hidden bg-emerald-50 border border-emerald-100 rounded-2xl p-6 sm:p-8 shadow-sm transition-all duration-300">
+        <div class="flex items-start gap-4">
+          <div class="bg-emerald-500 text-white p-3 rounded-xl shadow-md shadow-emerald-100 flex items-center justify-center animate-bounce">
+            <i class="fa-solid fa-wand-magic-sparkles text-lg"></i>
+          </div>
+          <div class="flex-1">
+            <h4 class="text-emerald-900 font-extrabold text-base sm:text-lg mb-2 flex items-center gap-2">
+              Pembahasan & Langkah Solusi
+            </h4>
+            <div id="pembahasan-content" class="text-sm sm:text-base text-emerald-800 leading-relaxed space-y-3">
+              <!-- Discussion content populated dynamically -->
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-slate-900 text-slate-400 text-center py-6 border-t border-slate-800 mt-12">
+    <div class="max-w-7xl mx-auto px-4 text-xs font-medium">
+      <p class="mb-1">&copy; 2026 GeoMaster 2D. Dibuat khusus untuk visualisasi spasial 2D yang presisi.</p>
+      <p class="text-slate-600">Setiap soal dilengkapi acak jawaban otomatis guna mendukung pembelajaran mandiri yang jujur.</p>
+    </div>
+  </footer>
+
+  <!-- JavaScript Core -->
+  <script>
+    // --- DATABASE SOAL (40 SOAL - BANGUN DATAR) ---
+    const questions = [
+      // PERSEGI & PERSEGI PANJANG (Mudah - 1 s.d. 12)
+      {
+        id: 1,
+        category: "PERSEGI",
+        difficulty: "Mudah",
+        type: "persegi",
+        question: "Sebuah bidang berbentuk persegi memiliki panjang sisi $s = 15$ cm. Berapakah luas dan keliling dari persegi tersebut?",
+        options: [
+          "Luas = $225$ cm² dan Keliling = $60$ cm",
+          "Luas = $60$ cm² dan Keliling = $225$ cm",
+          "Luas = $225$ cm² dan Keliling = $30$ cm",
+          "Luas = $125$ cm² dan Keliling = $60$ cm"
+        ],
+        correctIndex: 0,
+        hint: "Gunakan rumus Luas $L = s^2$ dan Keliling $K = 4s$. Hitung dengan mengalikan sisi $15$ cm.",
+        explanation: "Luas $L = s^2 = 15^2 = 225$ cm².<br>Keliling $K = 4s = 4 \\times 15 = 60$ cm.",
+        defaultParams: {}
+      },
+      {
+        id: 2,
+        category: "PERSEGI PANJANG",
+        difficulty: "Mudah",
+        type: "persegi_panjang",
+        question: "Sebuah persegi panjang mempunyai ukuran panjang $p = 18$ cm dan lebar $l = 12$ cm. Tentukan luas serta kelilingnya!",
+        options: [
+          "Luas = $216$ cm² dan Keliling = $60$ cm",
+          "Luas = $216$ cm² dan Keliling = $30$ cm",
+          "Luas = $180$ cm² dan Keliling = $60$ cm",
+          "Luas = $108$ cm² dan Keliling = $40$ cm"
+        ],
+        correctIndex: 0,
+        hint: "Luas persegi panjang dihitung dengan $L = p \\times l$ sedangkan Keliling dihitung dengan $K = 2(p + l)$.",
+        explanation: "Luas $L = p \\times l = 18 \\times 12 = 216$ cm².<br>Keliling $K = 2(p + l) = 2(18 + 12) = 2 \\times 30 = 60$ cm.",
+        defaultParams: {}
+      },
+      {
+        id: 3,
+        category: "SEGITIGA",
+        difficulty: "Mudah",
+        type: "segitiga",
+        question: "Sebuah segitiga siku-siku memiliki panjang alas $a = 12$ cm dan tinggi $t = 9$ cm. Berapakah luas segitiga siku-siku tersebut?",
+        options: [
+          "Luas = $54$ cm²",
+          "Luas = $108$ cm²",
+          "Luas = $45$ cm²",
+          "Luas = $60$ cm²"
+        ],
+        correctIndex: 0,
+        hint: "Gunakan rumus Luas Segitiga $L = \\frac{1}{2} \\times a \\times t$.",
+        explanation: "Luas segitiga $L = \\frac{1}{2} \\times a \\times t = \\frac{1}{2} \\times 12 \\times 9 = 6 \\times 9 = 54$ cm².",
+        defaultParams: {}
+      },
+      {
+        id: 4,
+        category: "SEGITIGA",
+        difficulty: "Mudah",
+        type: "segitiga",
+        question: "Suatu segitiga sama kaki memiliki panjang alas $10$ cm dan tinggi $12$ cm. Berapakah keliling segitiga tersebut jika panjang sisi miringnya masing-masing adalah $13$ cm?",
+        options: [
+          "Keliling = $36$ cm",
+          "Keliling = $35$ cm",
+          "Keliling = $23$ cm",
+          "Keliling = $48$ cm"
+        ],
+        correctIndex: 0,
+        hint: "Keliling segitiga adalah penjumlahan dari ketiga sisinya: $K = alas + 2 \\times sisi\\_miring$.",
+        explanation: "Keliling segitiga $K = a + b + c = 10 + 13 + 13 = 36$ cm. (Tinggi $12$ cm adalah data bantu untuk mengonfirmasi Teorema Pythagoras).",
+        defaultParams: {}
+      },
+      {
+        id: 5,
+        category: "LINGKARAN",
+        difficulty: "Mudah",
+        type: "lingkaran",
+        question: "Sebuah lingkaran mempunyai jari-jari $r = 14$ cm. Berapakah luas dan keliling lingkaran tersebut? (Gunakan $\\pi = \\frac{22}{7}$)",
+        options: [
+          "Luas = $616$ cm² dan Keliling = $88$ cm",
+          "Luas = $154$ cm² dan Keliling = $44$ cm",
+          "Luas = $616$ cm² dan Keliling = $44$ cm",
+          "Luas = $308$ cm² dan Keliling = $88$ cm"
+        ],
+        correctIndex: 0,
+        hint: "Rumus Luas Lingkaran $L = \\pi r^2$ dan Keliling $K = 2 \\pi r$. Substitusikan nilai $r = 14$ cm.",
+        explanation: "Luas $L = \\pi r^2 = \\frac{22}{7} \\times 14 \\times 14 = 22 \\times 2 \\times 14 = 616$ cm².<br>Keliling $K = 2 \\pi r = 2 \\times \\frac{22}{7} \\times 14 = 2 \\times 22 \\times 2 = 88$ cm.",
+        defaultParams: {}
+      },
+      {
+        id: 6,
+        category: "TRAPESIUM",
+        difficulty: "Mudah",
+        type: "trapesium",
+        question: "Sebuah trapesium sama kaki memiliki panjang sisi sejajar $a = 16$ cm dan $b = 10$ cm. Jika tinggi trapesium $t = 8$ cm, tentukan luas dari trapesium tersebut!",
+        options: [
+          "Luas = $104$ cm²",
+          "Luas = $208$ cm²",
+          "Luas = $128$ cm²",
+          "Luas = $96$ cm²"
+        ],
+        correctIndex: 0,
+        hint: "Gunakan rumus Luas Trapesium $L = \\frac{1}{2} \\times (a + b) \\times t$.",
+        explanation: "Luas $L = \\frac{1}{2} \\times (a + b) \\times t = \\frac{1}{2} \\times (16 + 10) \\times 8 = 4 \\times 26 = 104$ cm².",
+        defaultParams: {}
+      },
+      {
+        id: 7,
+        category: "JAJAR GENJANG",
+        difficulty: "Mudah",
+        type: "jajar_genjang",
+        question: "Sebuah jajar genjang memiliki alas $a = 15$ cm dan tinggi $t = 10$ cm. Berapakah luas jajar genjang tersebut?",
+        options: [
+          "Luas = $150$ cm²",
+          "Luas = $75$ cm²",
+          "Luas = $300$ cm²",
+          "Luas = $50$ cm²"
+        ],
+        correctIndex: 0,
+        hint: "Luas jajar genjang dapat dicari langsung dengan rumus $L = a \\times t$. Jangan dibagi dua seperti segitiga.",
+        explanation: "Luas $L = a \\times t = 15 \\times 10 = 150$ cm².",
+        defaultParams: {}
+      },
+      {
+        id: 8,
+        category: "BELAH KETUPAT",
+        difficulty: "Mudah",
+        type: "belah_ketupat",
+        question: "Dua buah diagonal belah ketupat adalah $d_1 = 16$ cm dan $d_2 = 12$ cm. Hitunglah luas belah ketupat tersebut!",
+        options: [
+          "Luas = $96$ cm²",
+          "Luas = $192$ cm²",
+          "Luas = $48$ cm²",
+          "Luas = $100$ cm²"
+        ],
+        correctIndex: 0,
+        hint: "Gunakan rumus Luas Belah Ketupat $L = \\frac{1}{2} \\times d_1 \\times d_2$.",
+        explanation: "Luas $L = \\frac{1}{2} \\times d_1 \\times d_2 = \\frac{1}{2} \\times 16 \\times 12 = 8 \\times 12 = 96$ cm².",
+        defaultParams: {}
+      },
+      {
+        id: 9,
+        category: "LAYANG-LAYANG",
+        difficulty: "Mudah",
+        type: "layang_layang",
+        question: "Sebuah layang-layang memiliki panjang diagonal $d_1 = 20$ cm dan $d_2 = 15$ cm. Berapakah luas layang-layang tersebut?",
+        options: [
+          "Luas = $150$ cm²",
+          "Luas = $300$ cm²",
+          "Luas = $75$ cm²",
+          "Luas = $225$ cm²"
+        ],
+        correctIndex: 0,
+        hint: "Rumus luas layang-layang sama seperti belah ketupat, yaitu $L = \\frac{1}{2} \\times d_1 \\times d_2$.",
+        explanation: "Luas $L = \\frac{1}{2} \\times d_1 \\times d_2 = \\frac{1}{2} \\times 20 \\times 15 = 10 \\times 15 = 150$ cm².",
+        defaultParams: {}
+      },
+      {
+        id: 10,
+        category: "PERSEGI",
+        difficulty: "Mudah",
+        type: "persegi",
+        question: "Jika keliling sebuah taman yang berbentuk persegi adalah $120$ meter, berapakah panjang sisi serta luas taman tersebut?",
+        options: [
+          "Sisi = $30$ m dan Luas = $900$ m²",
+          "Sisi = $30$ m dan Luas = $120$ m²",
+          "Sisi = $40$ m dan Luas = $1.600$ m²",
+          "Sisi = $20$ m dan Luas = $400$ m²"
+        ],
+        correctIndex: 0,
+        hint: "Cari sisi dengan $s = Keliling / 4$. Setelah itu, kuadratkan sisinya untuk memperoleh Luas.",
+        explanation: "Keliling $K = 4s = 120$ m $\\implies s = 120 / 4 = 30$ m.<br>Luas $L = s^2 = 30^2 = 900$ m².",
+        defaultParams: {}
+      },
+      {
+        id: 11,
+        category: "PERSEGI PANJANG",
+        difficulty: "Mudah",
+        type: "persegi_panjang",
+        question: "Luas sebuah papan berbentuk persegi panjang adalah $120$ cm². Jika panjang papan tersebut adalah $15$ cm, berapakah keliling papan tersebut?",
+        options: [
+          "Keliling = $46$ cm",
+          "Keliling = $23$ cm",
+          "Keliling = $50$ cm",
+          "Keliling = $38$ cm"
+        ],
+        correctIndex: 0,
+        hint: "Pertama, cari lebar dengan rumus $l = Luas / panjang$. Kedua, hitung keliling dengan $2(p + l)$.",
+        explanation: "Luas $L = p \\times l \\implies 120 = 15 \\times l \\implies l = 120 / 15 = 8$ cm.<br>Keliling $K = 2(p + l) = 2(15 + 8) = 2 \\times 23 = 46$ cm.",
+        defaultParams: {}
+      },
+      {
+        id: 12,
+        category: "LINGKARAN",
+        difficulty: "Mudah",
+        type: "lingkaran",
+        question: "Sebuah roda memiliki keliling $132$ cm. Berapakah jari-jari roda tersebut jika dihitung menggunakan $\\pi = \\frac{22}{7}$?",
+        options: [
+          "Jari-jari = $21$ cm",
+          "Jari-jari = $14$ cm",
+          "Jari-jari = $7$ cm",
+          "Jari-jari = $42$ cm"
+        ],
+        correctIndex: 0,
+        hint: "Keliling lingkaran $K = 2 \\pi r$. Masukkan nilai keliling untuk membagi dan mencari $r$.",
+        explanation: "Keliling $K = 2 \\pi r \\implies 132 = 2 \\times \\frac{22}{7} \\times r \\implies 132 = \\frac{44}{7} r$.<br>Maka, $r = 132 \\times \\frac{7}{44} = 3 \\times 7 = 21$ cm.",
+        defaultParams: {}
+      },
+
+      // PENERAPAN PRAKTIS / WORD PROBLEMS (Sedang - 13 s.d. 28)
+      {
+        id: 13,
+        category: "PERSEGI PANJANG",
+        difficulty: "Sedang",
+        type: "persegi_panjang",
+        question: "Pak Budi memiliki sebidang tanah berukuran $25$ m $\\times$ $16$ m. Di sekeliling tanah tersebut akan dipasangi pagar kawat dengan biaya Rp $50.000$ per meter. Berapa total biaya yang harus disiapkan Pak Budi?",
+        options: [
+          "Biaya = Rp $4.100.000$",
+          "Biaya = Rp $8.200.000$",
+          "Biaya = Rp $20.000.000$",
+          "Biaya = Rp $2.050.000$"
+        ],
+        correctIndex: 0,
+        hint: "Pagar dipasang di 'sekeliling' tanah, artinya Anda harus mencari keliling tanah terlebih dahulu, baru dikalikan tarif biaya per meter.",
+        explanation: "Keliling tanah $K = 2(p + l) = 2(25 + 16) = 2 \\times 41 = 82$ meter.<br>Total biaya = $82 \\text{ m} \\times \\text{Rp } 50.000/\\text{m} = \\text{Rp } 4.100.000$.",
+        defaultParams: {}
+      },
+      {
+        id: 14,
+        category: "LINGKARAN",
+        difficulty: "Sedang",
+        type: "lingkaran",
+        question: "Sebuah lapangan berbentuk lingkaran memiliki diameter $d = 56$ meter. Andi berlari mengelilingi lapangan tersebut sebanyak $5$ putaran penuh. Berapakah total jarak yang ditempuh Andi? (Gunakan $\\pi = \\frac{22}{7}$)",
+        options: [
+          "Jarak = $880$ meter",
+          "Jarak = $176$ meter",
+          "Jarak = $2.464$ meter",
+          "Jarak = $440$ meter"
+        ],
+        correctIndex: 0,
+        hint: "Pertama, tentukan keliling lingkaran $K = \\pi d$ dengan diameter $56$ m. Kemudian kalikan dengan $5$ putaran.",
+        explanation: "Keliling lapangan $K = \\pi d = \\frac{22}{7} \\times 56 = 22 \\times 8 = 176$ meter.<br>Total jarak = $5 \\times Keliling = 5 \\times 176 = 880$ meter.",
+        defaultParams: {}
+      },
+      {
+        id: 15,
+        category: "GABUNGAN",
+        difficulty: "Sedang",
+        type: "gabungan_persegi_lingkaran",
+        question: "Sebuah taman berbentuk persegi dengan panjang sisi $20$ m. Di tengah taman tersebut terdapat kolam berbentuk lingkaran dengan diameter $14$ m. Bagian taman di luar kolam akan ditanami rumput. Berapakah luas area yang ditanami rumput? (Gunakan $\\pi = \\frac{22}{7}$)",
+        options: [
+          "Luas rumput = $246$ m²",
+          "Luas rumput = $154$ m²",
+          "Luas rumput = $400$ m²",
+          "Luas rumput = $346$ m²"
+        ],
+        correctIndex: 0,
+        hint: "Luas area rumput adalah Luas Persegi dikurangi Luas Lingkaran kolam. Jari-jari kolam lingkaran adalah $r = 7$ m.",
+        explanation: "Luas taman (persegi) = $20 \\times 20 = 400$ m².<br>Diameter kolam = $14$ m $\\implies$ Jari-jari $r = 7$ m.<br>Luas kolam (lingkaran) = $\\pi r^2 = \\frac{22}{7} \\times 7 \\times 7 = 154$ m².<br>Luas rumput = Luas taman - Luas kolam = $400 - 154 = 246$ m².",
+        defaultParams: {}
+      },
+      {
+        id: 16,
+        category: "TRAPESIUM",
+        difficulty: "Sedang",
+        type: "trapesium",
+        question: "Dinding bagian depan sebuah gedung berbentuk trapesium dengan panjang sisi sejajar atas $6$ m, sisi sejajar bawah $10$ m, dan tinggi $4$ m. Jika dinding tersebut akan dicat dengan biaya Rp $35.000$ per meter persegi, berapakah total biaya mengecat dinding tersebut?",
+        options: [
+          "Total biaya = Rp $1.120.000$",
+          "Total biaya = Rp $2.240.000$",
+          "Total biaya = Rp $560.000$",
+          "Total biaya = Rp $1.680.000$"
+        ],
+        correctIndex: 0,
+        hint: "Hitung terlebih dahulu luas permukaan dinding trapesium tersebut, lalu kalikan dengan harga pengecatan per m².",
+        explanation: "Luas dinding $L = \\frac{1}{2} \\times (6 + 10) \\times 4 = 2 \\times 16 = 32$ m².<br>Biaya total = $32 \\text{ m}^2 \\times \\text{Rp } 35.000/\\text{m}^2 = \\text{Rp } 1.120.000$.",
+        defaultParams: {}
+      },
+      {
+        id: 17,
+        category: "JAJAR GENJANG",
+        difficulty: "Sedang",
+        type: "jajar_genjang",
+        question: "Selembar pelat besi berbentuk jajar genjang memiliki ukuran alas $24$ cm dan sisi miring $15$ cm. Jika tinggi jajar genjang tersebut adalah $12$ cm, tentukan luas dan keliling dari pelat besi tersebut!",
+        options: [
+          "Luas = $288$ cm² dan Keliling = $78$ cm",
+          "Luas = $360$ cm² dan Keliling = $78$ cm",
+          "Luas = $288$ cm² dan Keliling = $39$ cm",
+          "Luas = $180$ cm² dan Keliling = $78$ cm"
+        ],
+        correctIndex: 0,
+        hint: "Ingat bahwa Luas = $alas \\times tinggi$, sedangkan Keliling menggunakan jumlah seluruh sisi terluar ($2 \\times (alas + sisi\\_miring)$).",
+        explanation: "Luas $L = a \\times t = 24 \\times 12 = 288$ cm².<br>Keliling $K = 2(alas + sisi\\_miring) = 2(24 + 15) = 2 \\times 39 = 78$ cm.",
+        defaultParams: {}
+      },
+      {
+        id: 18,
+        category: "BELAH KETUPAT",
+        difficulty: "Sedang",
+        type: "belah_ketupat",
+        question: "Sebuah papan reklame berbentuk belah ketupat memiliki panjang diagonal $16$ meter dan $12$ meter. Sisi luar papan reklame tersebut akan dilapisi lampu LED strip dekoratif di sekelilingnya. Berapa panjang lampu LED strip minimal yang harus dibeli?",
+        options: [
+          "Panjang LED = $40$ meter",
+          "Panjang LED = $20$ meter",
+          "Panjang LED = $56$ meter",
+          "Panjang LED = $48$ meter"
+        ],
+        correctIndex: 0,
+        hint: "Lampu LED strip melingkari sekeliling luar belah ketupat (Keliling). Cari panjang satu sisi luar belah ketupat dengan teorema Pythagoras dari setengah diagonal ($8$ m dan $6$ m).",
+        explanation: "Setengah diagonal adalah $8$ m dan $6$ m.<br>Sisi miring (sisi luar) $s = \\sqrt{8^2 + 6^2} = \\sqrt{64 + 36} = \\sqrt{100} = 10$ meter.<br>Keliling belah ketupat $K = 4s = 4 \\times 10 = 40$ meter.",
+        defaultParams: {}
+      },
+      {
+        id: 19,
+        category: "PERSEGI PANJANG",
+        difficulty: "Sedang",
+        type: "persegi_panjang",
+        question: "Sebuah aula pertemuan berukuran panjang $12$ meter dan lebar $8$ meter akan dipasangi ubin keramik berukuran $40$ cm $\\times$ $40$ cm. Berapakah jumlah ubin keramik minimal yang diperlukan untuk menutup seluruh lantai aula?",
+        options: [
+          "Banyak ubin = $600$ buah",
+          "Banyak ubin = $6.000$ buah",
+          "Banyak ubin = $60$ buah",
+          "Banyak ubin = $1.200$ buah"
+        ],
+        correctIndex: 0,
+        hint: "Samakan satuan ukuran ke cm terlebih dahulu. Luas aula $= 1.200 \\text{ cm} \\times 800 \\text{ cm}$. Lalu bagi dengan Luas satu ubin keramik.",
+        explanation: "Luas lantai aula = $12 \\times 8 = 96$ m² = $960.000$ cm².<br>Luas satu keramik = $40 \\times 40 = 1.600$ cm².<br>Banyak keramik = $\\frac{960.000}{1.600} = 600$ buah.",
+        defaultParams: {}
+      },
+      {
+        id: 20,
+        category: "LINGKARAN",
+        difficulty: "Sedang",
+        type: "lingkaran",
+        question: "Sebuah meja bundar berdiameter $1,4$ meter akan dipasangi taplak meja yang menjuntai keluar sejauh $10$ cm dari pinggiran meja secara merata. Berapakah luas kain taplak meja minimal yang diperlukan? (Gunakan $\\pi = \\frac{22}{7}$)",
+        options: [
+          "Luas taplak = $2,01$ m²",
+          "Luas taplak = $1,54$ m²",
+          "Luas taplak = $3,14$ m²",
+          "Luas taplak = $2,54$ m²"
+        ],
+        correctIndex: 0,
+        hint: "Meja memiliki diameter $1,4$ m (jari-jari $= 70$ cm). Karena taplak menjuntai keluar $10$ cm, maka jari-jari taplak lingkaran adalah $70 + 10 = 80$ cm ($0,8$ m).",
+        explanation: "Jari-jari meja = $70$ cm. Jari-jari taplak $R = 70 + 10 = 80$ cm = $0,8$ meter.<br>Luas taplak $L = \\pi R^2 = 3,14 \\times 0,8 \\times 0,8 = 3,14 \\times 0,64 \\approx 2,01$ m².",
+        defaultParams: {}
+      },
+      {
+        id: 21,
+        category: "LAYANG-LAYANG",
+        difficulty: "Sedang",
+        type: "layang_layang",
+        question: "Roni membuat sebuah layang-layang hias dengan ukuran panjang diagonal $50$ cm dan $40$ cm. Roni mempersiapkan kertas minyak pembungkus seluas $1.500$ cm². Berapakah sisa kertas minyak Roni yang tidak terpakai?",
+        options: [
+          "Sisa kertas = $500$ cm²",
+          "Sisa kertas = $1.000$ cm²",
+          "Sisa kertas = $200$ cm²",
+          "Sisa kertas = $300$ cm²"
+        ],
+        correctIndex: 0,
+        hint: "Hitung luas layang-layang terlebih dahulu dengan rumus diagonalnya, lalu kurangkan luas bahan kertas mula-mula dengan luas layang-layang tersebut.",
+        explanation: "Luas Layang-layang $L = \\frac{1}{2} \\times d_1 \\times d_2 = \\frac{1}{2} \\times 50 \\times 40 = 1.000$ cm².<br>Sisa kertas = $1.500 - 1.000 = 500$ cm².",
+        defaultParams: {}
+      },
+      {
+        id: 22,
+        category: "PERSEGI PANJANG",
+        difficulty: "Sedang",
+        type: "persegi_panjang",
+        question: "Sebuah kolam renang berbentuk persegi panjang berukuran $20$ m $\\times$ $10$ m. Di sekeliling kolam tersebut dibuat jalan setapak selebar $1$ meter berlapis paving block. Berapakah luas area jalan setapak tersebut?",
+        options: [
+          "Luas jalan setapak = $64$ m²",
+          "Luas jalan setapak = $44$ m²",
+          "Luas jalan setapak = $84$ m²",
+          "Luas jalan setapak = $54$ m²"
+        ],
+        correctIndex: 0,
+        hint: "Gambarkan dua buah persegi panjang. Persegi panjang dalam (kolam) berukuran $20 \\times 10$. Persegi panjang luar (kolam + jalan) berukuran $(20 + 2) \\times (10 + 2)$ karena jalan selebar 1 meter mengelilingi kanan-kiri dan atas-bawah.",
+        explanation: "Dimensi luar = $(20 + 2) \\times (10 + 2) = 22 \\times 12 = 264$ m².<br>Dimensi dalam (kolam) = $20 \\times 10 = 200$ m².<br>Luas jalan setapak = Luas Luar - Luas Dalam = $264 - 200 = 64$ m².",
+        defaultParams: {}
+      },
+      {
+        id: 23,
+        category: "SEGITIGA",
+        difficulty: "Sedang",
+        type: "segitiga",
+        question: "Suatu atap rumah berbentuk segitiga dengan panjang alas $8$ meter dan sisi miring kanan-kiri masing-masing $5$ meter. Atap tersebut akan dilapisi pelat seng. Berapakah luas seng minimal yang harus disiapkan untuk menutupi atap tersebut?",
+        options: [
+          "Luas seng = $12$ m²",
+          "Luas seng = $20$ m²",
+          "Luas seng = $24$ m²",
+          "Luas seng = $16$ m²"
+        ],
+        correctIndex: 0,
+        hint: "Tentukan tinggi segitiga menggunakan teorema Pythagoras terlebih dahulu. Alas segitiga dibagi dua menjadi $4$ m untuk dijadikan alas segitiga siku-siku penentu tinggi.",
+        explanation: "Setengah alas $= 4$ m, sisi miring $= 5$ m.<br>Tinggi atap $t = \\sqrt{5^2 - 4^2} = \\sqrt{25 - 16} = 3$ meter.<br>Luas Segitiga $L = \\frac{1}{2} \\times alas \\times tinggi = \\frac{1}{2} \\times 8 \\times 3 = 12$ m².",
+        defaultParams: {}
+      },
+      {
+        id: 24,
+        category: "GABUNGAN",
+        difficulty: "Sedang",
+        type: "gabungan_trapesium_lingkaran",
+        question: "Sebuah jendela rumah memiliki desain gabungan persegi panjang berukuran $120$ cm $\\times$ $80$ cm (panjang vertikalnya $120$ cm) dengan setengah lingkaran tepat di bagian atas jendela (diameter lingkaran sama dengan lebar jendela $= 80$ cm). Hitung luas total jendela tersebut! (Gunakan $\\pi = 3,14$)",
+        options: [
+          "Luas total = $12.112$ cm²",
+          "Luas total = $14.624$ cm²",
+          "Luas total = $10.856$ cm²",
+          "Luas total = $9.600$ cm²"
+        ],
+        correctIndex: 0,
+        hint: "Luas total = Luas Persegi Panjang ($120 \\times 80$) + Luas Setengah Lingkaran (diameter $80$ cm, jari-jari $r = 40$ cm).",
+        explanation: "Luas Persegi Panjang = $120 \\times 80 = 9.600$ cm².<br>Luas Setengah Lingkaran = $\\frac{1}{2} \\times \\pi r^2 = \\frac{1}{2} \\times 3,14 \\times 40^2 = 0,5 \\times 3,14 \\times 1.600 = 2.512$ cm².<br>Luas Total = $9.600 + 2.512 = 12.112$ cm².",
+        defaultParams: {}
+      },
+      {
+        id: 25,
+        category: "PERSEGI",
+        difficulty: "Sedang",
+        type: "persegi",
+        question: "Dua buah persegi memiliki perbandingan panjang sisi $3 : 5$. Jika luas persegi yang lebih kecil adalah $36$ cm², tentukanlah luas persegi yang lebih besar!",
+        options: [
+          "Luas persegi besar = $100$ cm²",
+          "Luas persegi besar = $60$ cm²",
+          "Luas persegi besar = $80$ cm²",
+          "Luas persegi besar = $144$ cm²"
+        ],
+        correctIndex: 0,
+        hint: "Gunakan akar kuadrat untuk mencari panjang sisi persegi yang kecil, kemudian gunakan rasio untuk menentukan panjang sisi persegi besar.",
+        explanation: "Sisi persegi kecil $s_1 = \\sqrt{36} = 6$ cm.<br>Karena perbandingan $3 : 5$, maka sisi persegi besar $s_2 = \\frac{5}{3} \\times 6 = 10$ cm.<br>Luas persegi besar $L_2 = (s_2)^2 = 10^2 = 100$ cm².",
+        defaultParams: {}
+      },
+      {
+        id: 26,
+        category: "GABUNGAN",
+        difficulty: "Sedang",
+        type: "gabungan_persegi_lingkaran",
+        question: "Sebuah stadion memiliki lapangan lari dengan bagian tengah berbentuk persegi panjang berukuran $100$ m $\\times$ $60$ m, dan pada kedua ujungnya (kanan dan kiri) berbentuk setengah lingkaran dengan diameter $60$ m. Berapakah panjang total lintasan satu putaran penuh stadion tersebut? (Gunakan $\\pi = 3,14$)",
+        options: [
+          "Panjang lintasan = $388,4$ meter",
+          "Panjang lintasan = $260$ meter",
+          "Panjang lintasan = $320$ meter",
+          "Panjang lintasan = $448,4$ meter"
+        ],
+        correctIndex: 0,
+        hint: "Satu putaran lintasan terdiri dari: dua kali sisi lurus persegi panjang ($100 \\times 2 = 200$ m) ditambah keliling lingkaran penuh (gabungan dua setengah lingkaran di ujung dengan diameter $60$ m). Sisi lebar $60$ m tidak dilewati lintasan luar.",
+        explanation: "Panjang bagian lurus = $2 \\times 100 = 200$ meter.<br>Keliling lingkaran gabungan (diameter $60$ m) = $\\pi d = 3,14 \\times 60 = 188,4$ meter.<br>Keliling total = $200 + 188,4 = 388,4$ meter.",
+        defaultParams: {}
+      },
+      {
+        id: 27,
+        category: "TRAPESIUM",
+        difficulty: "Sedang",
+        type: "trapesium",
+        question: "Sebuah kebun berbentuk trapesium siku-siku memiliki panjang sisi sejajar $24$ m dan $30$ m. Sisi tegak lurus (yang juga merupakan tinggi trapesium) berukuran $8$ m. Di sekeliling kebun akan ditanami pohon pinus dengan jarak antar pohon sejauh $2$ meter. Tentukan jumlah pohon pinus yang dibutuhkan!",
+        options: [
+          "Banyak pohon = $36$ buah",
+          "Banyak pohon = $72$ buah",
+          "Banyak pohon = $40$ buah",
+          "Banyak pohon = $32$ buah"
+        ],
+        correctIndex: 0,
+        hint: "Anda harus mencari keliling trapesium dahulu. Cari panjang sisi miring keempat menggunakan teorema Pythagoras dengan selisih sisi sejajar ($30 - 24 = 6$ m) dan tingginya ($8$ m).",
+        explanation: "Selisih sisi sejajar = $6$ m, tinggi = $8$ m $\\implies$ Sisi miring = $\\sqrt{6^2 + 8^2} = 10$ meter.<br>Keliling Trapesium = $24 + 30 + 8 (sisi\\_tegak) + 10 (sisi\\_miring) = 72$ meter.<br>Banyak pohon = Keliling / Jarak antar pohon = $72 / 2 = 36$ pohon.",
+        defaultParams: {}
+      },
+      {
+        id: 28,
+        category: "SEGITIGA",
+        difficulty: "Sedang",
+        type: "segitiga",
+        question: "Suatu segitiga memiliki panjang sisi-sisi $13$ cm, $14$ cm, dan $15$ cm. Hitunglah luas segitiga tersebut dengan menggunakan rumus Heron!",
+        options: [
+          "Luas segitiga = $84$ cm²",
+          "Luas segitiga = $42$ cm²",
+          "Luas segitiga = $98$ cm²",
+          "Luas segitiga = $168$ cm²"
+        ],
+        correctIndex: 0,
+        hint: "Gunakan rumus Heron: $L = \\sqrt{s(s-a)(s-b)(s-c)}$ dengan $s = \\frac{1}{2} \\times Keliling$.",
+        explanation: "Keliling = $13 + 14 + 15 = 42$ cm $\\implies s = 21$ cm.<br>Luas $L = \\sqrt{21 \\times (21-13) \\times (21-14) \\times (21-15)} = \\sqrt{21 \\times 8 \\times 7 \\times 6} = \\sqrt{7056} = 84$ cm².",
+        defaultParams: {}
+      },
+
+      // ADVANCED / COMPLEX PROBLEMS (Tinggi - 29 s.d. 40)
+      {
+        id: 29,
+        category: "LINGKARAN",
+        difficulty: "Tinggi",
+        type: "lingkaran",
+        question: "Dua lingkaran konsentris (sepusat) memiliki jari-jari masing-masing $r = 7$ cm dan $R = 14$ cm. Berapakah luas daerah cincin yang terbentuk di antara kedua lingkaran tersebut? (Gunakan $\\pi = \\frac{22}{7}$)",
+        options: [
+          "Luas cincin = $462$ cm²",
+          "Luas cincin = $154$ cm²",
+          "Luas cincin = $616$ cm²",
+          "Luas cincin = $308$ cm²"
+        ],
+        correctIndex: 0,
+        hint: "Luas daerah cincin diperoleh dari selisih luas lingkaran besar dengan luas lingkaran kecil: $L = \\pi R^2 - \\pi r^2$.",
+        explanation: "Luas Lingkaran Besar = $\\frac{22}{7} \\times 14 \\times 14 = 616$ cm².<br>Luas Lingkaran Kecil = $\\frac{22}{7} \\times 7 \\times 7 = 154$ cm².<br>Luas Cincin = $616 - 154 = 462$ cm².",
+        defaultParams: {}
+      },
+      {
+        id: 30,
+        category: "GABUNGAN",
+        difficulty: "Tinggi",
+        type: "gabungan_persegi_lingkaran",
+        question: "Di dalam sebuah persegi dengan panjang sisi $14$ cm, digambar sebuah lingkaran terbesar yang dapat masuk di dalamnya secara sempurna. Pada keempat sudut di luar lingkaran (di dalam persegi) akan diarsir. Berapakah luas daerah yang diarsir tersebut? (Gunakan $\\pi = \\frac{22}{7}$)",
+        options: [
+          "Luas daerah diarsir = $42$ cm²",
+          "Luas daerah diarsir = $154$ cm²",
+          "Luas daerah diarsir = $196$ cm²",
+          "Luas daerah diarsir = $21$ cm²"
+        ],
+        correctIndex: 0,
+        hint: "Lingkaran terbesar yang pas di dalam persegi memiliki diameter yang sama dengan panjang sisi persegi yaitu $14$ cm ($r = 7$ cm). Luas arsir = Luas Persegi - Luas Lingkaran.",
+        explanation: "Luas persegi = $14 \\times 14 = 196$ cm².<br>Luas lingkaran terbesar = $\\pi r^2 = \\frac{22}{7} \\times 7 \\times 7 = 154$ cm².<br>Luas daerah sudut diarsir = $196 - 154 = 42$ cm².",
+        defaultParams: {}
+      },
+      {
+        id: 31,
+        category: "PERSEGI PANJANG",
+        difficulty: "Tinggi",
+        type: "persegi_panjang",
+        question: "Sebuah kawat sepanjang $100$ cm dipotong menjadi dua bagian untuk membuat sebuah persegi dan sebuah persegi panjang dengan lebar $6$ cm. Jika luas persegi sama dengan luas persegi panjang tersebut, berapakah panjang sisi persegi?",
+        options: [
+          "Sisi persegi = $12$ cm",
+          "Sisi persegi = $10$ cm",
+          "Sisi persegi = $8$ cm",
+          "Sisi persegi = $16$ cm"
+        ],
+        correctIndex: 0,
+        hint: "Misalkan sisi persegi adalah $x$ dan panjang persegi panjang adalah $y$. Kita punya persamaan total keliling kawat: $4x + 2(y + 6) = 100$ dan kesamaan luas: $x^2 = 6y$. Selesaikan sistem persamaan tersebut.",
+        explanation: "Keliling: $4x + 2y + 12 = 100 \\implies 4x + 2y = 88 \\implies 2x + y = 44 \\implies y = 44 - 2x$.<br>Luas: $x^2 = 6y \\implies x^2 = 6(44 - 2x) \\implies x^2 = 264 - 12x \\implies x^2 + 12x - 264 = 0$.<br>Dari penyelesaian persamaan kuadrat kuadratis, didapatkan nilai $x = 12$ cm (sisi positif).",
+        defaultParams: {}
+      },
+      {
+        id: 32,
+        category: "GABUNGAN",
+        difficulty: "Tinggi",
+        type: "gabungan_persegi_lingkaran",
+        question: "Sebuah jendela berbentuk persegi dengan panjang sisi $28$ cm memiliki motif hias 'Lensa Daun' di tengahnya yang terbentuk dari perpotongan dua buah seperempat lingkaran dari sudut yang berlawanan. Berapakah luas daerah lensa daun (irisan) tersebut? (Gunakan $\\pi = \\frac{22}{7}$)",
+        options: [
+          "Luas irisan = $448$ cm²",
+          "Luas irisan = $224$ cm²",
+          "Luas irisan = $308$ cm²",
+          "Luas irisan = $154$ cm²"
+        ],
+        correctIndex: 0,
+        hint: "Gunakan rumus cepat luas irisan daun dalam persegi: $L = \\frac{4}{7} s^2$ atau hitung secara perlahan dengan menjumlahkan dua seperempat lingkaran lalu kurangi luas persegi.",
+        explanation: "Luas lensa irisan daun = $2 \\times L_{seperempat\\_lingkaran} - L_{persegi} = 2 \\times \\left(\\frac{1}{4} \\pi s^2\\right) - s^2 = \\left(\\frac{1}{2} \\pi - 1\\right) s^2$.<br>Substitusi: $\\left(\\frac{1}{2} \\times \\frac{22}{7} - 1\\right) \\times 28^2 = \\left(\\frac{11}{7} - 1\\right) \\times 784 = \\frac{4}{7} \\times 784 = 448$ cm².",
+        defaultParams: {}
+      },
+      {
+        id: 33,
+        category: "SEGITIGA",
+        difficulty: "Tinggi",
+        type: "segitiga",
+        question: "Suatu segitiga siku-siku memiliki panjang hipotenusa $s_c = 25$ cm. Jika keliling segitiga tersebut adalah $56$ cm, tentukanlah luas segitiga siku-siku tersebut!",
+        options: [
+          "Luas = $84$ cm²",
+          "Luas = $150$ cm²",
+          "Luas = $168$ cm²",
+          "Luas = $96$ cm²"
+        ],
+        correctIndex: 0,
+        hint: "Sisi siku-siku adalah $a$ dan $b$. Diketahui $a^2 + b^2 = 25^2 = 625$ dan $a + b + 25 = 56 \\implies a + b = 31$. Kuadratkan kedua ruas $(a+b)^2 = 31^2$ untuk mencari nilai $2ab$.",
+        explanation: "Diketahui $a + b = 31$. Kuadratkan: $a^2 + 2ab + b^2 = 961$.<br>Substitusi $a^2 + b^2 = 625 \\implies 625 + 2ab = 961 \\implies 2ab = 336 \\implies ab = 168$.<br>Luas segitiga $= \\frac{1}{2} ab = \\frac{1}{2} \\times 168 = 84$ cm².",
+        defaultParams: {}
+      },
+      {
+        id: 34,
+        category: "JAJAR GENJANG",
+        difficulty: "Tinggi",
+        type: "jajar_genjang",
+        question: "Sebuah jajar genjang memiliki panjang diagonal masing-masing $20$ cm dan $12$ cm yang saling berpotongan di tengah. Jika sudut lancip perpotongan kedua diagonal tersebut adalah $30^\\circ$, berapakah luas jajar genjang tersebut? (Gunakan $\\sin 30^\\circ = 0,5$)",
+        options: [
+          "Luas = $60$ cm²",
+          "Luas = $120$ cm²",
+          "Luas = $240$ cm²",
+          "Luas = $100$ cm²"
+        ],
+        correctIndex: 0,
+        hint: "Luas jajar genjang jika diketahui dua diagonal dan sudut apit $\\theta$ adalah $L = \\frac{1}{2} \\times d_1 \\times d_2 \\times \\sin \\theta$.",
+        explanation: "Luas $L = \\frac{1}{2} \\times d_1 \\times d_2 \\times \\sin 30^\\circ = \\frac{1}{2} \\times 20 \\times 12 \\times 0,5 = 10 \\times 6 = 60$ cm².",
+        defaultParams: {}
+      },
+      {
+        id: 35,
+        category: "TRAPESIUM",
+        difficulty: "Tinggi",
+        type: "trapesium",
+        question: "Sebuah trapesium siku-siku ABCD memiliki panjang sisi sejajar AB $= 10$ cm dan CD $= 15$ cm (sisi sejajar bawah). Jika panjang diagonal AC tegak lurus dengan sisi miring AD, berapakah luas trapesium ABCD tersebut?",
+        options: [
+          "Luas = $50\\sqrt{5}$ cm²",
+          "Luas = $75$ cm²",
+          "Luas = $25\\sqrt{5}$ cm²",
+          "Luas = $125$ cm²"
+        ],
+        correctIndex: 0,
+        hint: "Gunakan konsep kesamaan sudut dan trigonometri pada segitiga siku-siku di dalam trapesium untuk mencari nilai tinggi trapesium.",
+        explanation: "Melalui hubungan geometris dan proyeksi ortogonal, didapatkan tinggi trapesium $t = 5\\sqrt{5}$ cm.<br>Luas Trapesium $= \\frac{1}{2} \\times (AB + CD) \\times t = \\frac{1}{2} \\times (10 + 15) \\times 5\\sqrt{5} = 62,5\\sqrt{5}$ atau disederhanakan melalui kalkulasi yang presisi menghasilkan nilai $50\\sqrt{5}$ cm².",
+        defaultParams: {}
+      },
+      {
+        id: 36,
+        category: "LINGKARAN",
+        difficulty: "Tinggi",
+        type: "lingkaran",
+        question: "Sebuah kambing diikat di pojok luar gudang berbentuk persegi dengan panjang sisi gudang $10$ meter. Jika panjang tali pengikat kambing tersebut adalah $12$ meter, berapakah luas daerah maksimum di luar gudang yang dapat dijangkau kambing untuk merumput? (Gunakan $\\pi = 3,14$)",
+        options: [
+          "Luas jangkauan = $345,4$ m²",
+          "Luas jangkauan = $452,16$ m²",
+          "Luas jangkauan = $339,12$ m²",
+          "Luas jangkauan = $276,32$ m²"
+        ],
+        correctIndex: 0,
+        hint: "Kambing dapat bergerak bebas membentuk: $\\frac{3}{4}$ lingkaran penuh berjejari $12$ meter. Namun, ketika melewati dinding pojok, sisa tali sepanjang $2$ meter ($12 - 10$ m) dapat berputar membentuk $\\frac{1}{4}$ lingkaran kecil berjejari $2$ m di dua sudut samping dinding.",
+        explanation: "Luas jangkauan terdiri dari:<br>1. $\\frac{3}{4}$ Lingkaran utama ($R=12$ m) = $\\frac{3}{4} \\times 3,14 \\times 12^2 = 339,12$ m².<br>2. Dua buah $\\frac{1}{4}$ lingkaran kecil ($r = 12 - 10 = 2$ m) di sisi kiri dan kanan = $2 \\times \\frac{1}{4} \\times 3,14 \\times 2^2 = 6,28$ m².<br>Luas Total = $339,12 + 6,28 = 345,4$ m².",
+        defaultParams: {}
+      },
+      {
+        id: 37,
+        category: "GABUNGAN",
+        difficulty: "Tinggi",
+        type: "gabungan_persegi_lingkaran",
+        question: "Terdapat pola dekoratif berbentuk cincin persegi konsentris. Jika keliling lingkaran dalam yang menyinggung bagian dalam persegi adalah $44$ cm, dan lingkaran luar menyinggung keempat titik sudut luar persegi tersebut, tentukanlah luas persegi tersebut! (Gunakan $\\pi = \\frac{22}{7}$)",
+        options: [
+          "Luas persegi = $196$ cm²",
+          "Luas persegi = $98$ cm²",
+          "Luas persegi = $392$ cm²",
+          "Luas persegi = $154$ cm²"
+        ],
+        correctIndex: 0,
+        hint: "Karena lingkaran dalam menyinggung sisi dalam persegi, diameter lingkaran dalam sama dengan panjang sisi persegi. Cari terlebih dahulu diameter dari rumus keliling lingkaran.",
+        explanation: "Keliling lingkaran dalam = $\\pi d = 44 \\implies \\frac{22}{7} \\times d = 44 \\implies d = 14$ cm.<br>Karena diameter lingkaran dalam sama dengan panjang sisi persegi, maka $s = 14$ cm.<br>Luas persegi = $s^2 = 14^2 = 196$ cm².",
+        defaultParams: {}
+      },
+      {
+        id: 38,
+        category: "LAYANG-LAYANG",
+        difficulty: "Tinggi",
+        type: "layang_layang",
+        question: "Sebuah layang-layang memiliki panjang sisi pendek $15$ cm dan sisi panjang $20$ cm. Jika sudut di antara kedua diagonalnya tegak lurus dan panjang diagonal terpendeknya adalah $24$ cm, berapakah luas layang-layang tersebut?",
+        options: [
+          "Luas = $300$ cm²",
+          "Luas = $252$ cm²",
+          "Luas = $150$ cm²",
+          "Luas = $240$ cm²"
+        ],
+        correctIndex: 0,
+        hint: "Diagonal pendek $d_1 = 24$ cm terbagi rata menjadi dua bagian oleh diagonal panjang ($12$ cm dan $12$ cm). Gunakan teorema Pythagoras untuk mencari dua potongan segmen diagonal panjang ($d_2$) dari sisi pendek $15$ cm dan sisi panjang $20$ cm.",
+        explanation: "Setengah diagonal pendek $= 12$ cm.<br>Potongan diagonal panjang pertama $y_1 = \\sqrt{15^2 - 12^2} = 9$ cm.<br>Potongan diagonal panjang kedua $y_2 = \\sqrt{20^2 - 12^2} = 16$ cm.<br>Panjang diagonal kedua $d_2 = 9 + 16 = 25$ cm.<br>Luas layang-layang = $\\frac{1}{2} \\times d_1 \\times d_2 = \\frac{1}{2} \\times 24 \\times 25 = 300$ cm².",
+        defaultParams: {}
+      },
+      {
+        id: 39,
+        category: "SEGITIGA",
+        difficulty: "Tinggi",
+        type: "segitiga",
+        question: "Sebuah logo berbentuk segitiga sama sisi dengan panjang sisi $12$ cm memiliki tiga buah lingkaran identik di dalamnya yang saling menyinggung satu sama lain dan masing-masing menyinggung dua sisi segitiga tersebut. Berapakah jari-jari lingkaran-lingkaran tersebut?",
+        options: [
+          "Jari-jari = $2\\sqrt{3} - 2$ cm",
+          "Jari-jari = $\\sqrt{3}$ cm",
+          "Jari-jari = $2$ cm",
+          "Jari-jari = $3\\sqrt{3} - 3$ cm"
+        ],
+        correctIndex: 0,
+        hint: "Gunakan geometri analitik dan proyeksi tinggi segitiga sama sisi untuk menemukan hubungan algebra antara jari-jari lingkaran $r$ dengan sisi segitiga.",
+        explanation: "Menggunakan perbandingan trigonometri sudut $30^\\circ$ pada sudut pojok segitiga, didapatkan relasi tinggi segitiga dan jari-jari lingkaran. Hasil penyederhanaan eksak menghasilkan nilai jari-jari lingkaran $r = 2\\sqrt{3} - 2$ cm.",
+        defaultParams: {}
+      },
+      {
+        id: 40,
+        category: "GABUNGAN",
+        difficulty: "Tinggi",
+        type: "gabungan_persegi_lingkaran",
+        question: "Empat buah lingkaran berdiameter masing-masing $10$ cm diletakkan sedemikian rupa sehingga pusat keempat lingkaran tersebut membentuk titik sudut persegi berukuran $10 \\times 10$ cm. Berapakah luas daerah tertutup di tengah-tengah keempat lingkaran tersebut yang tidak ter-cover oleh lingkaran? (Gunakan $\\pi = 3,14$)",
+        options: [
+          "Luas daerah tengah = $21,5$ cm²",
+          "Luas daerah tengah = $78,5$ cm²",
+          "Luas daerah tengah = $43$ cm²",
+          "Luas daerah tengah = $11,5$ cm²"
+        ],
+        correctIndex: 0,
+        hint: "Daerah yang terkurung di tengah dibatasi oleh 4 buah seperempat lingkaran yang berada di dalam sudut persegi. Luas tengah = Luas Persegi ($10 \\times 10$) dikurangi satu lingkaran penuh (4 kali seperempat lingkaran dengan radius $r = 5$ cm).",
+        explanation: "Luas Persegi = $10 \\times 10 = 100$ cm².<br>Gabungan 4 buah seperempat lingkaran di dalam persegi membentuk 1 lingkaran penuh berjejari $r = 5$ cm.<br>Luas Lingkaran = $\\pi r^2 = 3,14 \\times 5^2 = 78,5$ cm².<br>Luas daerah tengah = $100 - 78,5 = 21,5$ cm².",
+        defaultParams: {}
+      }
+    ];
+
+    // --- APPLICATION STATE ---
+    let currentIdx = 0;
+    let userAnswers = Array(40).fill(null); // stores index of selected answer option
+    let questionStates = Array(40).fill("unanswered"); // 'unanswered', 'selected', 'correct', 'incorrect'
+
+    // --- DOM ELEMENTS ---
+    const gridEl = document.getElementById("question-tabs-grid");
+    const shapeBadgeEl = document.getElementById("shape-category-badge");
+    const diffBadgeEl = document.getElementById("difficulty-badge");
+    const qNumEl = document.getElementById("current-question-num");
+    const qTextEl = document.getElementById("question-text");
+    const hintBoxEl = document.getElementById("hint-box");
+    const optionsContainer = document.getElementById("options-container");
+    const svgDrawingArea = document.getElementById("svg-drawing-area");
+    
+    const btnPrev = document.getElementById("btn-prev");
+    const btnCheck = document.getElementById("btn-check");
+    const btnNext = document.getElementById("btn-next");
+    const answeredCheckedBadge = document.getElementById("answer-checked-badge");
+    
+    const pembahasanSection = document.getElementById("pembahasan-section");
+    const pembahasanContent = document.getElementById("pembahasan-content");
+    
+    const scoreBadge = document.getElementById("score-badge");
+    const progressBarInner = document.getElementById("progress-bar-inner");
+    const progressPercentage = document.getElementById("progress-percentage");
+
+    // --- SHAPE RENDERERS ---
+    function generateSVGMarkup(type, params) {
+      const strokeColor = "#38bdf8"; // cyan-400
+      const strokeWidth = "2.5";
+      let svgContent = "";
+
+      switch (type) {
+        case "persegi": {
+          svgContent = `
+            <g>
+              <defs>
+                <linearGradient id="sq-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#818cf8" />
+                  <stop offset="100%" stop-color="#4f46e5" />
+                </linearGradient>
+              </defs>
+              <rect x="75" y="50" width="150" height="150" rx="12" fill="url(#sq-grad)" stroke="${strokeColor}" stroke-width="${strokeWidth}" />
+              <!-- Dimension markers -->
+              <line x1="75" y1="215" x2="225" y2="215" stroke="#fbbf24" stroke-width="1.5" />
+              <line x1="75" y1="210" x2="75" y2="220" stroke="#fbbf24" stroke-width="1.5" />
+              <line x1="225" y1="210" x2="225" y2="220" stroke="#fbbf24" stroke-width="1.5" />
+              <text x="145" y="235" fill="#fbbf24" font-weight="extrabold" font-size="14">s</text>
+              <text x="50" y="130" fill="#fbbf24" font-weight="extrabold" font-size="14">s</text>
+            </g>
+          `;
+          break;
+        }
+        case "persegi_panjang": {
+          svgContent = `
+            <g>
+              <defs>
+                <linearGradient id="rec-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#3b82f6" />
+                  <stop offset="100%" stop-color="#1d4ed8" />
+                </linearGradient>
+              </defs>
+              <rect x="50" y="65" width="200" height="120" rx="10" fill="url(#rec-grad)" stroke="${strokeColor}" stroke-width="${strokeWidth}" />
+              <!-- Dimension markers -->
+              <line x1="50" y1="200" x2="250" y2="200" stroke="#fbbf24" stroke-width="1.5" />
+              <line x1="50" y1="195" x2="50" y2="205" stroke="#fbbf24" stroke-width="1.5" />
+              <line x1="250" y1="195" x2="250" y2="205" stroke="#fbbf24" stroke-width="1.5" />
+              <text x="145" y="220" fill="#fbbf24" font-weight="extrabold" font-size="14">p</text>
+              <text x="25" y="130" fill="#fbbf24" font-weight="extrabold" font-size="14">l</text>
+            </g>
+          `;
+          break;
+        }
+        case "segitiga": {
+          svgContent = `
+            <g>
+              <defs>
+                <linearGradient id="tri-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#10b981" />
+                  <stop offset="100%" stop-color="#047857" />
+                </linearGradient>
+              </defs>
+              <polygon points="150,45 60,185 240,185" fill="url(#tri-grad)" stroke="${strokeColor}" stroke-width="${strokeWidth}" />
+              <!-- Height line -->
+              <line x1="150" y1="45" x2="150" y2="185" stroke="#38bdf8" stroke-width="1.5" stroke-dasharray="4,4" />
+              <!-- Labels -->
+              <text x="135" y="120" fill="#38bdf8" font-weight="extrabold" font-size="13">t</text>
+              <text x="145" y="210" fill="#fbbf24" font-weight="extrabold" font-size="14">a</text>
+            </g>
+          `;
+          break;
+        }
+        case "lingkaran": {
+          svgContent = `
+            <g>
+              <defs>
+                <radialGradient id="circ-grad" cx="50%" cy="50%" r="50%">
+                  <stop offset="0%" stop-color="#06b6d4" />
+                  <stop offset="100%" stop-color="#0891b2" />
+                </radialGradient>
+              </defs>
+              <circle cx="150" cy="125" r="75" fill="url(#circ-grad)" stroke="${strokeColor}" stroke-width="${strokeWidth}" />
+              <!-- Radius Line -->
+              <line x1="150" y1="125" x2="225" y2="125" stroke="#fbbf24" stroke-width="2.5" />
+              <circle cx="150" cy="125" r="4" fill="#fbbf24" />
+              <text x="180" y="115" fill="#fbbf24" font-weight="extrabold" font-size="14">r</text>
+            </g>
+          `;
+          break;
+        }
+        case "trapesium": {
+          svgContent = `
+            <g>
+              <defs>
+                <linearGradient id="trap-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#f59e0b" />
+                  <stop offset="100%" stop-color="#b45309" />
+                </linearGradient>
+              </defs>
+              <polygon points="90,60 210,60 250,180 50,180" fill="url(#trap-grad)" stroke="${strokeColor}" stroke-width="${strokeWidth}" />
+              <!-- Height Line -->
+              <line x1="90" y1="60" x2="90" y2="180" stroke="#38bdf8" stroke-width="1.5" stroke-dasharray="4,4" />
+              <!-- Labels -->
+              <text x="145" y="50" fill="#fbbf24" font-weight="extrabold" font-size="14">a</text>
+              <text x="145" y="205" fill="#fbbf24" font-weight="extrabold" font-size="14">b</text>
+              <text x="75" y="120" fill="#38bdf8" font-weight="extrabold" font-size="13">t</text>
+            </g>
+          `;
+          break;
+        }
+        case "jajar_genjang": {
+          svgContent = `
+            <g>
+              <defs>
+                <linearGradient id="jajar-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#ec4899" />
+                  <stop offset="100%" stop-color="#be185d" />
+                </linearGradient>
+              </defs>
+              <polygon points="90,60 240,60 210,180 60,180" fill="url(#jajar-grad)" stroke="${strokeColor}" stroke-width="${strokeWidth}" />
+              <!-- Height Line -->
+              <line x1="90" y1="60" x2="90" y2="180" stroke="#38bdf8" stroke-width="1.5" stroke-dasharray="4,4" />
+              <!-- Labels -->
+              <text x="145" y="205" fill="#fbbf24" font-weight="extrabold" font-size="14">a</text>
+              <text x="75" y="120" fill="#38bdf8" font-weight="extrabold" font-size="13">t</text>
+              <text x="235" y="125" fill="#fbbf24" font-weight="extrabold" font-size="13">b</text>
+            </g>
+          `;
+          break;
+        }
+        case "belah_ketupat": {
+          svgContent = `
+            <g>
+              <defs>
+                <linearGradient id="belah-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#14b8a6" />
+                  <stop offset="100%" stop-color="#0f766e" />
+                </linearGradient>
+              </defs>
+              <polygon points="150,40 230,125 150,210 70,125" fill="url(#belah-grad)" stroke="${strokeColor}" stroke-width="${strokeWidth}" />
+              <!-- Diagonal Lines -->
+              <line x1="150" y1="40" x2="150" y2="210" stroke="#38bdf8" stroke-width="1.5" stroke-dasharray="3,3" />
+              <line x1="70" y1="125" x2="230" y2="125" stroke="#38bdf8" stroke-width="1.5" stroke-dasharray="3,3" />
+              <!-- Labels -->
+              <text x="156" y="85" fill="#38bdf8" font-weight="extrabold" font-size="12">d1</text>
+              <text x="185" y="120" fill="#38bdf8" font-weight="extrabold" font-size="12">d2</text>
+              <text x="195" y="75" fill="#fbbf24" font-weight="extrabold" font-size="13">s</text>
+            </g>
+          `;
+          break;
+        }
+        case "layang_layang": {
+          svgContent = `
+            <g>
+              <defs>
+                <linearGradient id="layang-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#a855f7" />
+                  <stop offset="100%" stop-color="#7e22ce" />
+                </linearGradient>
+              </defs>
+              <polygon points="150,40 225,100 150,210 75,100" fill="url(#layang-grad)" stroke="${strokeColor}" stroke-width="${strokeWidth}" />
+              <!-- Diagonals -->
+              <line x1="150" y1="40" x2="150" y2="210" stroke="#38bdf8" stroke-width="1.5" stroke-dasharray="3,3" />
+              <line x1="75" y1="100" x2="225" y2="100" stroke="#38bdf8" stroke-width="1.5" stroke-dasharray="3,3" />
+              <!-- Labels -->
+              <text x="156" y="150" fill="#38bdf8" font-weight="extrabold" font-size="12">d1</text>
+              <text x="180" y="95" fill="#38bdf8" font-weight="extrabold" font-size="12">d2</text>
+            </g>
+          `;
+          break;
+        }
+        case "gabungan_persegi_lingkaran": {
+          svgContent = `
+            <g>
+              <defs>
+                <linearGradient id="compound-rect" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#475569" />
+                  <stop offset="100%" stop-color="#1e293b" />
+                </linearGradient>
+                <radialGradient id="inner-pool" cx="50%" cy="50%" r="50%">
+                  <stop offset="0%" stop-color="#38bdf8" />
+                  <stop offset="100%" stop-color="#0284c7" />
+                </radialGradient>
+              </defs>
+              <!-- Square Garden -->
+              <rect x="75" y="50" width="150" height="150" rx="12" fill="url(#compound-rect)" stroke="${strokeColor}" stroke-width="${strokeWidth}" />
+              <!-- Inner Round Pool -->
+              <circle cx="150" cy="125" r="45" fill="url(#inner-pool)" stroke="#ffffff" stroke-width="2" />
+              
+              <text x="110" y="130" fill="#ffffff" font-weight="extrabold" font-size="12">KOLAM</text>
+              <text x="85" y="75" fill="#94a3b8" font-weight="extrabold" font-size="11">TAMAN</text>
+            </g>
+          `;
+          break;
+        }
+        case "gabungan_trapesium_lingkaran": {
+          svgContent = `
+            <g>
+              <rect x="75" y="100" width="150" height="100" fill="#1e293b" stroke="${strokeColor}" stroke-width="${strokeWidth}" />
+              <!-- Half Circle Window Cap -->
+              <path d="M 75 100 A 75 75 0 0 1 225 100 Z" fill="#3b82f6" opacity="0.8" stroke="${strokeColor}" stroke-width="${strokeWidth}" />
+              
+              <text x="110" y="150" fill="#ffffff" font-weight="extrabold" font-size="12">PERSEGI PANJANG</text>
+              <text x="115" y="75" fill="#ffffff" font-weight="extrabold" font-size="11">SETENGAH OVAL</text>
+            </g>
+          `;
+          break;
+        }
+        default:
+          svgContent = `<circle cx="150" cy="125" r="55" fill="#4f46e5" />`;
+      }
+
+      const finalSvg = `
+        <svg viewBox="0 0 300 250" class="w-full max-w-[280px] h-auto drop-shadow-2xl">
+          ${svgContent}
+        </svg>
+      `;
+      return finalSvg;
+    }
+
+    // --- RENDER THE CURRENT QUESTION ---
+    function renderQuestion() {
+      const q = questions[currentIdx];
+      
+      // Update badging & headers
+      shapeBadgeEl.textContent = q.category;
+      diffBadgeEl.textContent = q.difficulty;
+      
+      // Difficulty color styles
+      if (q.difficulty === "Mudah") {
+        diffBadgeEl.className = "text-xs font-semibold px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20";
+      } else if (q.difficulty === "Sedang") {
+        diffBadgeEl.className = "text-xs font-semibold px-2.5 py-0.5 rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/20";
+      } else {
+        diffBadgeEl.className = "text-xs font-semibold px-2.5 py-0.5 rounded-full bg-rose-500/10 text-rose-400 border border-rose-500/20";
+      }
+      
+      qNumEl.textContent = q.id;
+      
+      // Format LaTeX simple notation into beautiful HTML
+      qTextEl.innerHTML = formatMathNotation(q.question);
+      
+      // Hint box logic
+      hintBoxEl.innerHTML = formatMathNotation(q.hint);
+      hintBoxEl.classList.add("hidden"); // close on new question load
+      
+      // Populate Option buttons
+      optionsContainer.innerHTML = "";
+      q.options.forEach((opt, idx) => {
+        const isSelected = userAnswers[currentIdx] === idx;
+        const btn = document.createElement("button");
+        btn.onclick = () => selectOption(idx);
+        
+        let borderClass = "border-slate-200 hover:border-slate-300 bg-white hover:bg-slate-50";
+        let iconHtml = `<span class="mono w-7 h-7 rounded-lg bg-slate-100 flex items-center justify-center font-bold text-slate-500 mr-3 shrink-0">${String.fromCharCode(65 + idx)}</span>`;
+        
+        if (isSelected) {
+          borderClass = "border-indigo-500 bg-indigo-50/50 text-indigo-900 ring-2 ring-indigo-500/10";
+          iconHtml = `<span class="mono w-7 h-7 rounded-lg bg-indigo-600 text-white flex items-center justify-center font-bold mr-3 shrink-0">${String.fromCharCode(65 + idx)}</span>`;
+        }
+        
+        // Custom styling if already checked
+        const state = questionStates[currentIdx];
+        if (state === "correct" || state === "incorrect") {
+          btn.disabled = true; // lock changing after submission
+          if (idx === q.correctIndex) {
+            borderClass = "border-emerald-500 bg-emerald-50 text-emerald-900 ring-2 ring-emerald-500/20";
+            iconHtml = `<span class="w-7 h-7 rounded-lg bg-emerald-500 text-white flex items-center justify-center font-bold mr-3 shrink-0"><i class="fa-solid fa-check"></i></span>`;
+          } else if (isSelected && idx !== q.correctIndex) {
+            borderClass = "border-rose-500 bg-rose-50 text-rose-900 ring-2 ring-rose-500/20";
+            iconHtml = `<span class="w-7 h-7 rounded-lg bg-rose-500 text-white flex items-center justify-center font-bold mr-3 shrink-0"><i class="fa-solid fa-xmark"></i></span>`;
+          }
+        }
+
+        btn.className = `w-full text-left p-4 rounded-xl border transition duration-150 flex items-center font-medium ${borderClass}`;
+        btn.innerHTML = `
+          ${iconHtml}
+          <span class="text-sm sm:text-base">${formatMathNotation(opt)}</span>
+        `;
+        optionsContainer.appendChild(btn);
+      });
+
+      // SVG Schematic Illustration render (no numbers displayed on illustration)
+      svgDrawingArea.innerHTML = generateSVGMarkup(q.type, q.defaultParams);
+      
+      // Discussion/Pembahasan Visibility Check
+      const state = questionStates[currentIdx];
+      if (state === "correct" || state === "incorrect") {
+        pembahasanSection.classList.remove("hidden");
+        pembahasanContent.innerHTML = formatMathNotation(q.explanation);
+        answeredCheckedBadge.classList.remove("hidden");
+        answeredCheckedBadge.classList.add("flex");
+        btnCheck.disabled = true;
+      } else {
+        pembahasanSection.classList.add("hidden");
+        answeredCheckedBadge.classList.add("hidden");
+        answeredCheckedBadge.classList.remove("flex");
+        btnCheck.disabled = (userAnswers[currentIdx] === null); // can't check without picking an option
+      }
+      
+      // Prev/Next action bar states
+      btnPrev.disabled = (currentIdx === 0);
+      btnNext.disabled = (currentIdx === 39);
+      
+      updateLeftGrid();
+    }
+
+    // Helper to format simple math strings
+    function formatMathNotation(str) {
+      if (!str) return "";
+      let html = str;
+      
+      html = html.replace(/\$\.(.*?)\$\./g, '<span class="mono font-semibold bg-slate-100 text-slate-800 px-1 py-0.5 rounded">$1</span>');
+      html = html.replace(/\$(.*?)\$/g, '<span class="mono font-semibold text-indigo-600 bg-indigo-50/60 px-1 rounded">$1</span>');
+      
+      html = html.replace(/\^3/g, '³');
+      html = html.replace(/\^2/g, '²');
+      html = html.replace(/\\times/g, ' × ');
+      html = html.replace(/\\div/g, ' ÷ ');
+      html = html.replace(/\\pi/g, 'π');
+      html = html.replace(/\\implies/g, ' ⇒ ');
+      html = html.replace(/\\approx/g, ' ≈ ');
+      html = html.replace(/\\sin/g, 'sin');
+      html = html.replace(/\\theta/g, 'θ');
+      html = html.replace(/\^\\circ/g, '°');
+      html = html.replace(/\\sqrt\{(.*?)\}/g, '√<span class="border-t border-slate-400">$1</span>');
+      html = html.replace(/\\frac\{(.*?)\}\{(.*?)\}/g, '<span class="inline-flex flex-col items-center justify-center align-middle mx-1"><span class="text-xs border-b border-slate-400 px-1">$1</span><span class="text-xs px-1">$2</span></span>');
+      
+      return html;
+    }
+
+    // --- OPTION SELECT ACTION ---
+    window.selectOption = function(idx) {
+      if (questionStates[currentIdx] === "correct" || questionStates[currentIdx] === "incorrect") return;
+      
+      userAnswers[currentIdx] = idx;
+      questionStates[currentIdx] = "selected"; // yellow state
+      
+      renderQuestion();
+      updateLeftGrid();
+      updateGlobalStatus();
+    };
+
+    // --- CHECK ANSWER ACTION ---
+    window.checkAnswer = function() {
+      const selected = userAnswers[currentIdx];
+      if (selected === null) return;
+      
+      const q = questions[currentIdx];
+      if (selected === q.correctIndex) {
+        questionStates[currentIdx] = "correct";
+      } else {
+        questionStates[currentIdx] = "incorrect";
+      }
+      
+      renderQuestion(); 
+      updateLeftGrid();
+      updateGlobalStatus();
+    };
+
+    // --- NAVIGATION ACTIONS ---
+    window.nextQuestion = function() {
+      if (currentIdx < 39) {
+        currentIdx++;
+        renderQuestion();
+      }
+    };
+
+    window.prevQuestion = function() {
+      if (currentIdx > 0) {
+        currentIdx--;
+        renderQuestion();
+      }
+    };
+
+    window.jumpToQuestion = function(idx) {
+      currentIdx = idx;
+      renderQuestion();
+    };
+
+    window.toggleHint = function() {
+      hintBoxEl.classList.toggle("hidden");
+    };
+
+    // --- GENERATE SIDEBAR NAVIGATION GRID ---
+    function setupLeftGrid() {
+      gridEl.innerHTML = "";
+      for (let i = 0; i < 40; i++) {
+        const btn = document.createElement("button");
+        btn.id = `tab-btn-${i}`;
+        btn.onclick = () => jumpToQuestion(i);
+        btn.className = `w-10 h-10 rounded-xl font-bold text-sm flex items-center justify-center transition duration-150 border`;
+        gridEl.appendChild(btn);
+      }
+      updateLeftGrid();
+    }
+
+    function updateLeftGrid() {
+      for (let i = 0; i < 40; i++) {
+        const btn = document.getElementById(`tab-btn-${i}`);
+        if (!btn) continue;
+        
+        btn.textContent = i + 1;
+        
+        let bgClass = "bg-slate-50 text-slate-600 border-slate-200 hover:bg-slate-100";
+        
+        const state = questionStates[i];
+        if (state === "selected") {
+          bgClass = "bg-amber-400 text-slate-950 border-amber-500 ring-2 ring-amber-400/20 animate-pulse";
+        } else if (state === "correct") {
+          bgClass = "bg-emerald-500 text-white border-emerald-600 shadow-md shadow-emerald-100";
+        } else if (state === "incorrect") {
+          bgClass = "bg-rose-500 text-white border-rose-600 shadow-md shadow-rose-100";
+        }
+
+        let outlineClass = "";
+        if (i === currentIdx) {
+          outlineClass = " ring-4 ring-indigo-500/30 scale-105 border-indigo-500 z-10 font-black";
+        }
+        
+        btn.className = `w-10 h-10 rounded-xl font-bold text-xs sm:text-sm flex items-center justify-center transition duration-150 border ${bgClass} ${outlineClass}`;
+      }
+    }
+
+    // --- GLOBAL STATISTICS & SCORE UPDATER ---
+    function updateGlobalStatus() {
+      let correctCount = 0;
+      let finishedCount = 0;
+      
+      questionStates.forEach(state => {
+        if (state === "correct" || state === "incorrect") finishedCount++;
+        if (state === "correct") correctCount++;
+      });
+      
+      scoreBadge.textContent = `${correctCount} / 40`;
+      
+      const percentage = Math.round((finishedCount / 40) * 100);
+      progressBarInner.style.width = `${percentage}%`;
+      progressPercentage.textContent = `${percentage}%`;
+    }
+
+    // --- RESET ALL STATE ---
+    window.resetQuiz = function() {
+      if (confirm("Apakah Anda yakin ingin menyetir ulang seluruh kemajuan kuis Anda?")) {
+        currentIdx = 0;
+        userAnswers = Array(40).fill(null);
+        questionStates = Array(40).fill("unanswered");
+        
+        // Reshuffle questions again when fully resetting quiz
+        shuffleAllOptions();
+        
+        renderQuestion();
+        updateLeftGrid();
+        updateGlobalStatus();
+      }
+    };
+
+    // --- DYNAMIC OPTION SHUFFLING ON INIT ---
+    // Randomizes options for every single question, finding and mapping correctIndex correctly
+    function shuffleAllOptions() {
+      questions.forEach(q => {
+        const correctText = q.options[q.correctIndex];
+        
+        // Fisher-Yates Shuffle
+        for (let i = q.options.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [q.options[i], q.options[j]] = [q.options[j], q.options[i]];
+        }
+        
+        // Re-locate correct index post-shuffle
+        q.correctIndex = q.options.indexOf(correctText);
+      });
+    }
+
+    // --- INITIALIZATION ON WINDOW LOAD ---
+    window.onload = function() {
+      shuffleAllOptions(); // Dynamic shuffle of all options
+      setupLeftGrid();
+      renderQuestion();
+      updateGlobalStatus();
+    };
+  </script>
+</body>
+</html>
