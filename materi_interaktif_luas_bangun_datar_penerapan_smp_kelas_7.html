@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eksplorasi Luas Bangun Datar - Kelas 7 SMP</title>
+    <!-- Tailwind CSS for modern aesthetic and responsive design -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .custom-shadow { box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.05); }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col">
+
+    <header class="bg-indigo-600 text-white shadow-md sticky top-0 z-50">
+        <div class="max-w-5xl mx-auto px-4 py-4 flex flex-col sm:flex-row justify-between items-center gap-2">
+            <div class="flex items-center space-x-3">
+                <div class="bg-white text-indigo-600 p-2 rounded-xl font-bold text-xl shadow">
+                    <i class="fa-solid fa-shapes"></i>
+                </div>
+                <div>
+                    <h1 class="text-lg sm:text-xl font-bold">Matematika Kelas 7 SMP</h1>
+                    <p class="text-xs text-indigo-200">Penerapan Operasi Luas Bangun Datar</p>
+                </div>
+            </div>
+            <div class="flex items-center space-x-2 text-xs sm:text-sm bg-indigo-700 px-3 py-1.5 rounded-full">
+                <i class="fa-solid fa-graduation-cap text-indigo-300"></i>
+                <span>Kurikulum Merdeka Interaktif</span>
+            </div>
+        </div>
+    </header>
+
+    <main class="flex-grow max-w-5xl w-full mx-auto p-4 sm:p-6 space-y-8">
+
+        <!-- SECTION 1: TUJUAN PEMBELAJARAN -->
+        <section class="bg-white rounded-2xl p-6 custom-shadow border border-slate-100 transition duration-300 hover:shadow-lg">
+            <div class="flex items-center space-x-3 mb-4">
+                <div class="w-10 h-10 rounded-xl bg-amber-100 text-amber-600 flex items-center justify-center font-bold text-lg">
+                    <i class="fa-solid fa-bullseye"></i>
+                </div>
+                <h2 class="text-xl font-bold text-slate-900">1. Tujuan Pembelajaran</h2>
+            </div>
+            <p class="text-slate-600 mb-4 text-sm sm:text-base">
+                Setelah mempelajari modul interaktif ini, kamu diharapkan mampu:
+            </p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                <div class="flex items-start space-x-3 bg-amber-50/50 p-3.5 rounded-xl border border-amber-100">
+                    <span class="bg-amber-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs font-bold flex-shrink-0 mt-0.5">1</span>
+                    <p class="text-sm text-slate-700">Memahami konsep dasar rumus luas berbagai bangun datar (persegi, persegi panjang, segitiga, jajargenjang, trapesium, dan belah ketupat).</p>
+                </div>
+                <div class="flex items-start space-x-3 bg-amber-50/50 p-3.5 rounded-xl border border-amber-100">
+                    <span class="bg-amber-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs font-bold flex-shrink-0 mt-0.5">2</span>
+                    <p class="text-sm text-slate-700">Menyelesaikan soal-soal penerapan konteks nyata (soal cerita) yang berkaitan dengan luas bangun datar.</p>
+                </div>
+                <div class="flex items-start space-x-3 bg-amber-50/50 p-3.5 rounded-xl border border-amber-100">
+                    <span class="bg-amber-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs font-bold flex-shrink-0 mt-0.5">3</span>
+                    <p class="text-sm text-slate-700">Menghitung luas gabungan dari beberapa bangun datar dengan cermat dan teliti.</p>
+                </div>
+                <div class="flex items-start space-x-3 bg-amber-50/50 p-3.5 rounded-xl border border-amber-100">
+                    <span class="bg-amber-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs font-bold flex-shrink-0 mt-0.5">4</span>
+                    <p class="text-sm text-slate-700">Menerapkan konsep luas dalam estimasi biaya material bangunan atau penataan lahan.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 2: WARM-UP (4 SOAL) -->
+        <section class="bg-white rounded-2xl p-6 custom-shadow border border-slate-100">
+            <div class="flex items-center space-x-3 mb-2">
+                <div class="w-10 h-10 rounded-xl bg-emerald-100 text-emerald-600 flex items-center justify-center font-bold text-lg">
+                    <i class="fa-solid fa-fire"></i>
+                </div>
+                <div>
+                    <h2 class="text-xl font-bold text-slate-900">2. Warm-Up (Pemanasan Otak)</h2>
+                    <p class="text-xs text-slate-500">Mari uji ingatan rumus dasarmu sebelum masuk ke soal penerapan!</p>
+                </div>
+            </div>
+
+            <div class="space-y-6 mt-6">
+                <!-- Warmup 1 -->
+                <div class="p-4 rounded-xl bg-slate-50 border border-slate-200" id="wu-1">
+                    <div class="flex flex-col md:flex-row gap-4 items-center mb-3">
+                        <div class="w-full md:w-2/3">
+                            <p class="font-medium text-sm sm:text-base text-slate-800">
+                                <span class="font-bold text-emerald-600">Soal 1:</span> Sebuah lapangan berbentuk persegi panjang memiliki panjang 15 m dan lebar 8 m. Berapakah luas lapangan tersebut?
+                            </p>
+                        </div>
+                        <div class="w-full md:w-1/3 flex justify-center bg-white p-2 rounded-lg border border-slate-200">
+                            <svg width="140" height="70" viewBox="0 0 140 70">
+                                <rect x="10" y="10" width="120" height="50" rx="4" fill="#e0e7ff" stroke="#4f46e5" stroke-width="2"/>
+                                <text x="70" y="38" font-size="11" fill="#312e81" text-anchor="middle" font-weight="600">p = 15 m</text>
+                                <text x="70" y="66" font-size="10" fill="#475569" text-anchor="middle">l = 8 m</text>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-4 gap-2 mb-2">
+                        <button onclick="checkWarmup(1, 'A', 'B')" class="wu-btn-1 p-2.5 text-sm rounded-lg border border-slate-300 bg-white hover:bg-emerald-50 hover:border-emerald-400 transition font-medium text-left">A. 120 m²</button>
+                        <button onclick="checkWarmup(1, 'B', 'B')" class="wu-btn-1 p-2.5 text-sm rounded-lg border border-slate-300 bg-white hover:bg-emerald-50 hover:border-emerald-400 transition font-medium text-left">B. 46 m²</button>
+                        <button onclick="checkWarmup(1, 'C', 'B')" class="wu-btn-1 p-2.5 text-sm rounded-lg border border-slate-300 bg-white hover:bg-emerald-50 hover:border-emerald-400 transition font-medium text-left">C. 23 m²</button>
+                        <button onclick="checkWarmup(1, 'D', 'B')" class="wu-btn-1 p-2.5 text-sm rounded-lg border border-slate-300 bg-white hover:bg-emerald-50 hover:border-emerald-400 transition font-medium text-left">D. 240 m²</button>
+                    </div>
+                    <div id="feedback-wu-1" class="hidden text-xs sm:text-sm font-semibold p-2 rounded-lg"></div>
+                </div>
+
+                <!-- Warmup 2 -->
+                <div class="p-4 rounded-xl bg-slate-50 border border-slate-200" id="wu-2">
+                    <div class="flex flex-col md:flex-row gap-4 items-center mb-3">
+                        <div class="w-full md:w-2/3">
+                            <p class="font-medium text-sm sm:text-base text-slate-800">
+                                <span class="font-bold text-emerald-600">Soal 2:</span> Sebuah segitiga memiliki alas 12 cm dan tinggi 10 cm. Berapakah luasnya?
+                            </p>
+                        </div>
+                        <div class="w-full md:w-1/3 flex justify-center bg-white p-2 rounded-lg border border-slate-200">
+                            <svg width="120" height="70" viewBox="0 0 120 70">
+                                <polygon points="60,10 15,60 105,60" fill="#d1fae5" stroke="#059669" stroke-width="2"/>
+                                <line x1="60" y1="10" x2="60" y2="60" stroke="#059669" stroke-dasharray="3,3" stroke-width="1.5"/>
+                                <text x="60" y="38" font-size="10" fill="#065f46" text-anchor="middle" font-weight="600">t=10</text>
+                                <text x="60" y="68" font-size="10" fill="#065f46" text-anchor="middle">alas = 12 cm</text>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-4 gap-2 mb-2">
+                        <button onclick="checkWarmup(2, 'A', 'A')" class="wu-btn-2 p-2.5 text-sm rounded-lg border border-slate-300 bg-white hover:bg-emerald-50 hover:border-emerald-400 transition font-medium text-left">A. 60 cm²</button>
+                        <button onclick="checkWarmup(2, 'B', 'A')" class="wu-btn-2 p-2.5 text-sm rounded-lg border border-slate-300 bg-white hover:bg-emerald-50 hover:border-emerald-400 transition font-medium text-left">B. 120 cm²</button>
+                        <button onclick="checkWarmup(2, 'C', 'A')" class="wu-btn-2 p-2.5 text-sm rounded-lg border border-slate-300 bg-white hover:bg-emerald-50 hover:border-emerald-400 transition font-medium text-left">C. 22 cm²</button>
+                        <button onclick="checkWarmup(2, 'D', 'A')" class="wu-btn-2 p-2.5 text-sm rounded-lg border border-slate-300 bg-white hover:bg-emerald-50 hover:border-emerald-400 transition font-medium text-left">D. 30 cm²</button>
+                    </div>
+                    <div id="feedback-wu-2" class="hidden text-xs sm:text-sm font-semibold p-2 rounded-lg"></div>
+                </div>
+
+                <!-- Warmup 3 -->
+                <div class="p-4 rounded-xl bg-slate-50 border border-slate-200" id="wu-3">
+                    <div class="flex flex-col md:flex-row gap-4 items-center mb-3">
+                        <div class="w-full md:w-2/3">
+                            <p class="font-medium text-sm sm:text-base text-slate-800">
+                                <span class="font-bold text-emerald-600">Soal 3:</span> Kolam renang berbentuk trapesium dengan panjang sisi sejajar 10 m dan 16 m, serta jarak kedua sisi sejajar (tinggi) 5 m. Luas permukaan kolam tersebut adalah...
+                            </p>
+                        </div>
+                        <div class="w-full md:w-1/3 flex justify-center bg-white p-2 rounded-lg border border-slate-200">
+                            <svg width="130" height="65" viewBox="0 0 130 65">
+                                <polygon points="30,10 100,10 120,55 10,55" fill="#fef3c7" stroke="#d97706" stroke-width="2"/>
+                                <text x="65" y="24" font-size="10" fill="#b45309" text-anchor="middle" font-weight="600">a = 10 m</text>
+                                <text x="65" y="50" font-size="10" fill="#b45309" text-anchor="middle" font-weight="600">b = 16 m</text>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-4 gap-2 mb-2">
+                        <button onclick="checkWarmup(3, 'A', 'C')" class="wu-btn-3 p-2.5 text-sm rounded-lg border border-slate-300 bg-white hover:bg-emerald-50 hover:border-emerald-400 transition font-medium text-left">A. 130 m²</button>
+                        <button onclick="checkWarmup(3, 'B', 'C')" class="wu-btn-3 p-2.5 text-sm rounded-lg border border-slate-300 bg-white hover:bg-emerald-50 hover:border-emerald-400 transition font-medium text-left">B. 52 m²</button>
+                        <button onclick="checkWarmup(3, 'C', 'C')" class="wu-btn-3 p-2.5 text-sm rounded-lg border border-slate-300 bg-white hover:bg-emerald-50 hover:border-emerald-400 transition font-medium text-left">C. 65 m²</button>
+                        <button onclick="checkWarmup(3, 'D', 'C')" class="wu-btn-3 p-2.5 text-sm rounded-lg border border-slate-300 bg-white hover:bg-emerald-50 hover:border-emerald-400 transition font-medium text-left">D. 80 m²</button>
+                    </div>
+                    <div id="feedback-wu-3" class="hidden text-xs sm:text-sm font-semibold p-2 rounded-lg"></div>
+                </div>
+
+                <!-- Warmup 4 -->
+                <div class="p-4 rounded-xl bg-slate-50 border border-slate-200" id="wu-4">
+                    <div class="flex flex-col md:flex-row gap-4 items-center mb-3">
+                        <div class="w-full md:w-2/3">
+                            <p class="font-medium text-sm sm:text-base text-slate-800">
+                                <span class="font-bold text-emerald-600">Soal 4:</span> Sebuah layang-layang memiliki panjang diagonal masing-masing 16 cm dan 20 cm. Berapakah luas layang-layang tersebut?
+                            </p>
+                        </div>
+                        <div class="w-full md:w-1/3 flex justify-center bg-white p-2 rounded-lg border border-slate-200">
+                            <svg width="100" height="70" viewBox="0 0 100 70">
+                                <polygon points="50,5 90,35 50,65 10,35" fill="#fce7f3" stroke="#db2777" stroke-width="2"/>
+                                <line x1="50" y1="5" x2="50" y2="65" stroke="#db2777" stroke-dasharray="2,2"/>
+                                <line x1="10" y1="35" x2="90" y2="35" stroke="#db2777" stroke-dasharray="2,2"/>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-4 gap-2 mb-2">
+                        <button onclick="checkWarmup(4, 'A', 'B')" class="wu-btn-4 p-2.5 text-sm rounded-lg border border-slate-300 bg-white hover:bg-emerald-50 hover:border-emerald-400 transition font-medium text-left">A. 360 cm²</button>
+                        <button onclick="checkWarmup(4, 'B', 'B')" class="wu-btn-4 p-2.5 text-sm rounded-lg border border-slate-300 bg-white hover:bg-emerald-50 hover:border-emerald-400 transition font-medium text-left">B. 160 cm²</button>
+                        <button onclick="checkWarmup(4, 'C', 'B')" class="wu-btn-4 p-2.5 text-sm rounded-lg border border-slate-300 bg-white hover:bg-emerald-50 hover:border-emerald-400 transition font-medium text-left">C. 320 cm²</button>
+                        <button onclick="checkWarmup(4, 'D', 'B')" class="wu-btn-4 p-2.5 text-sm rounded-lg border border-slate-300 bg-white hover:bg-emerald-50 hover:border-emerald-400 transition font-medium text-left">D. 80 cm²</button>
+                    </div>
+                    <div id="feedback-wu-4" class="hidden text-xs sm:text-sm font-semibold p-2 rounded-lg"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 3: KONEKSI NYATA -->
+        <section class="bg-white rounded-2xl p-6 custom-shadow border border-slate-100">
+            <div class="flex items-center space-x-3 mb-4">
+                <div class="w-10 h-10 rounded-xl bg-sky-100 text-sky-600 flex items-center justify-center font-bold text-lg">
+                    <i class="fa-solid fa-lightbulb"></i>
+                </div>
+                <h2 class="text-xl font-bold text-slate-900">3. Koneksi Nyata (Mengapa Kita Belajar Ini?)</h2>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div class="bg-sky-50/50 p-4 rounded-xl border border-sky-100 flex flex-col justify-between">
+                    <div>
+                        <div class="text-sky-600 font-bold mb-2 flex items-center gap-2">
+                            <i class="fa-solid fa-house"></i> Renovasi Rumah
+                        </div>
+                        <p class="text-xs sm:text-sm text-slate-600">Saat tukang ingin memasang keramik lantai rumah, mereka harus menghitung luas ruangan agar tahu berapa banyak dus keramik yang harus dibeli agar tidak kurang atau mubazir.</p>
+                    </div>
+                </div>
+                <div class="bg-sky-50/50 p-4 rounded-xl border border-sky-100 flex flex-col justify-between">
+                    <div>
+                        <div class="text-sky-600 font-bold mb-2 flex items-center gap-2">
+                            <i class="fa-solid fa-seedling"></i> Lanskap & Pertanian
+                        </div>
+                        <p class="text-xs sm:text-sm text-slate-600">Petani atau arsitek lanskap perlu mengetahui luas kebun untuk memperhitungkan jumlah pupuk, bibit tanaman, atau rumput taman yang dibutuhkan per meter persegi.</p>
+                    </div>
+                </div>
+                <div class="bg-sky-50/50 p-4 rounded-xl border border-sky-100 flex flex-col justify-between">
+                    <div>
+                        <div class="text-sky-600 font-bold mb-2 flex items-center gap-2">
+                            <i class="fa-solid fa-paintbrush"></i> Pengecatan & Desain
+                        </div>
+                        <p class="text-xs sm:text-sm text-slate-600">Pengecatan dinding rumah atau pembuatan baliho iklan memerlukan perhitungan luas permukaan bidang datar untuk menentukan biaya cat dan bahan banner.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 4: MATERI LENGKAP & CONTOH SOAL PENERAPAN -->
+        <section class="bg-white rounded-2xl p-6 custom-shadow border border-slate-100 space-y-6">
+            <div class="flex items-center space-x-3 mb-2">
+                <div class="w-10 h-10 rounded-xl bg-purple-100 text-purple-600 flex items-center justify-center font-bold text-lg">
+                    <i class="fa-solid fa-book-open"></i>
+                </div>
+                <div>
+                    <h2 class="text-xl font-bold text-slate-900">4. Materi Lengkap & Contoh Soal Penerapan</h2>
+                    <p class="text-xs text-slate-500">Kumpulan rumus esensial dan studi kasus kehidupan sehari-hari dengan ilustrasi.</p>
+                </div>
+            </div>
+
+            <!-- Rumus Ringkas -->
+            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-3 text-center">
+                <div class="bg-slate-50 p-3 rounded-xl border border-slate-200">
+                    <span class="block font-bold text-xs text-slate-700">Persegi</span>
+                    <span class="text-xs text-purple-600 font-semibold mt-1 block">L = s &times; s</span>
+                </div>
+                <div class="bg-slate-50 p-3 rounded-xl border border-slate-200">
+                    <span class="block font-bold text-xs text-slate-700">P. Panjang</span>
+                    <span class="text-xs text-purple-600 font-semibold mt-1 block">L = p &times; l</span>
+                </div>
+                <div class="bg-slate-50 p-3 rounded-xl border border-slate-200">
+                    <span class="block font-bold text-xs text-slate-700">Segitiga</span>
+                    <span class="text-xs text-purple-600 font-semibold mt-1 block">L = &frac12; &times; a &times; t</span>
+                </div>
+                <div class="bg-slate-50 p-3 rounded-xl border border-slate-200">
+                    <span class="block font-bold text-xs text-slate-700">Jajargenjang</span>
+                    <span class="text-xs text-purple-600 font-semibold mt-1 block">L = a &times; t</span>
+                </div>
+                <div class="bg-slate-50 p-3 rounded-xl border border-slate-200">
+                    <span class="block font-bold text-xs text-slate-700">Trapesium</span>
+                    <span class="text-xs text-purple-600 font-semibold mt-1 block">L = &frac12;(a+b)&times;t</span>
+                </div>
+                <div class="bg-slate-50 p-3 rounded-xl border border-slate-200">
+                    <span class="block font-bold text-xs text-slate-700">Belah Ketupat</span>
+                    <span class="text-xs text-purple-600 font-semibold mt-1 block">L = &frac12; &times; d&sub1; &times; d&sub2;</span>
+                </div>
+            </div>
+
+            <!-- Contoh Soal 1: Pemasangan Keramik -->
+            <div class="border border-purple-100 bg-purple-50/30 rounded-2xl p-5 space-y-4">
+                <div class="flex items-center gap-2 text-purple-700 font-bold">
+                    <i class="fa-solid fa-circle-question"></i> Contoh Soal 1: Pemasangan Keramik Ruang Tamu
+                </div>
+                
+                <div class="flex flex-col md:flex-row gap-4 items-center">
+                    <div class="w-full md:w-3/5 text-sm text-slate-700 space-y-2">
+                        <p>
+                            Ayah ingin memasang keramik pada lantai ruang tamu yang berbentuk persegi panjang dengan ukuran panjang <strong>6 meter</strong> dan lebar <strong>4 meter</strong>. Jika keramik yang digunakan berukuran persegi dengan sisi <strong>40 cm (0,4 m)</strong>, berapa dus keramik yang harus dibeli jika 1 dus berisi 10 buah keramik?
+                        </p>
+                    </div>
+                    <div class="w-full md:w-2/5 flex justify-center bg-white p-3 rounded-xl border border-purple-200">
+                        <!-- SVG Illustration for Ruang Tamu -->
+                        <svg width="180" height="90" viewBox="0 0 180 90">
+                            <rect x="10" y="10" width="160" height="70" fill="#ede9fe" stroke="#7c3aed" stroke-width="2" rx="4"/>
+                            <text x="90" y="42" font-size="11" fill="#5b21b6" text-anchor="middle" font-weight="bold">Panjang = 6 m</text>
+                            <text x="90" y="62" font-size="10" fill="#6d28d9" text-anchor="middle">Lebar = 4 m</text>
+                            <path d="M 10 10 L 25 25 M 170 10 L 155 25 M 10 80 L 25 65 M 170 80 L 155 65" stroke="#7c3aed" stroke-width="1"/>
+                        </svg>
+                    </div>
+                </div>
+
+                <div class="bg-white p-4 rounded-xl border border-purple-100 space-y-2 text-sm text-slate-600">
+                    <p class="font-semibold text-purple-900">Penyelesaian Langkah demi Langkah:</p>
+                    <ul class="list-disc list-inside space-y-1 pl-2">
+                        <li><strong>Luas Ruang Tamu:</strong> Panjang &times; Lebar = 6 m &times; 4 m = 24 m&sup2;.</li>
+                        <li><strong>Luas 1 Buah Keramik:</strong> s &times; s = 0,4 m &times; 0,4 m = 0,16 m&sup2;.</li>
+                        <li><strong>Jumlah Keramik yang Dibutuhkan:</strong> Luas Ruangan &divide; Luas 1 Keramik = 24 &divide; 0,16 = 150 buah keramik.</li>
+                        <li><strong>Jumlah Dus Keramik:</strong> 150 buah &divide; 10 buah/dus = 15 dus.</li>
+                    </ul>
+                    <p class="text-xs text-emerald-600 font-semibold pt-1">&✨ Jadi, Ayah harus membeli sebanyak 15 dus keramik.</p>
+                </div>
+            </div>
+
+            <!-- Contoh Soal 2: Luas Gabungan Lahan -->
+            <div class="border border-purple-100 bg-purple-50/30 rounded-2xl p-5 space-y-4">
+                <div class="flex items-center gap-2 text-purple-700 font-bold">
+                    <i class="fa-solid fa-circle-question"></i> Contoh Soal 2: Menghitung Luas Gabungan Lahan Tanaman
+                </div>
+
+                <div class="flex flex-col md:flex-row gap-4 items-center">
+                    <div class="w-full md:w-3/5 text-sm text-slate-700 space-y-2">
+                        <p>
+                            Sebuah pekarangan berbentuk gabungan persegi panjang dan segitiga. Bagian persegi panjang berukuran panjang <strong>10 m</strong> dan lebar <strong>6 m</strong>. Di atas lebar tersebut menempel sebuah segitiga sama kaki dengan tinggi segitiga <strong>4 m</strong>. Hitunglah total luas pekarangan tersebut!
+                        </p>
+                    </div>
+                    <div class="w-full md:w-2/5 flex justify-center bg-white p-3 rounded-xl border border-purple-200">
+                        <!-- SVG Illustration for Gabungan -->
+                        <svg width="160" height="95" viewBox="0 0 160 95">
+                            <!-- Segitiga di atas -->
+                            <polygon points="80,5 30,45 130,45" fill="#ddd6fe" stroke="#7c3aed" stroke-width="2"/>
+                            <!-- Persegi panjang di bawah -->
+                            <rect x="30" y="45" width="100" height="45" fill="#ede9fe" stroke="#7c3aed" stroke-width="2" rx="2"/>
+                            <text x="80" y="32" font-size="9" fill="#5b21b6" text-anchor="middle" font-weight="600">t = 4 m</text>
+                            <text x="80" y="70" font-size="10" fill="#5b21b6" text-anchor="middle" font-weight="600">p = 10 m, l = 6 m</text>
+                        </svg>
+                    </div>
+                </div>
+
+                <div class="bg-white p-4 rounded-xl border border-purple-100 space-y-2 text-sm text-slate-600">
+                    <p class="font-semibold text-purple-900">Penyelesaian Langkah demi Langkah:</p>
+                    <ul class="list-disc list-inside space-y-1 pl-2">
+                        <li><strong>Luas Bagian Persegi Panjang:</strong> p &times; l = 10 m &times; 6 m = 60 m&sup2;.</li>
+                        <li><strong>Luas Bagian Segitiga:</strong> Alas segitiga mengikuti lebar persegi panjang yaitu 6 m. <br>
+                            Luas = &frac12; &times; alas &times; tinggi = &frac12; &times; 6 m &times; 4 m = 12 m&sup2;.</li>
+                        <li><strong>Total Luas Pekarangan:</strong> Luas Persegi Panjang + Luas Segitiga = 60 m&sup2; + 12 m&sup2; = 72 m&sup2;.</li>
+                    </ul>
+                    <p class="text-xs text-emerald-600 font-semibold pt-1">&✨ Jadi, total luas pekarangan adalah 72 m&sup2;.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 5: LATIHAN SOAL TERBIMBING -->
+        <section class="bg-white rounded-2xl p-6 custom-shadow border border-slate-100">
+            <div class="flex items-center space-x-3 mb-2">
+                <div class="w-10 h-10 rounded-xl bg-rose-100 text-rose-600 flex items-center justify-center font-bold text-lg">
+                    <i class="fa-solid fa-brain"></i>
+                </div>
+                <div>
+                    <h2 class="text-xl font-bold text-slate-900">5. Latihan Soal Terbimbing</h2>
+                    <p class="text-xs text-slate-500">Kerjakan soal penerapan berikut beserta ilustrasinya untuk menguji pemahamanmu!</p>
+                </div>
+            </div>
+
+            <div class="space-y-6 mt-6">
+                <!-- Latihan 1 -->
+                <div class="p-4 rounded-xl bg-slate-50 border border-slate-200" id="ex-1">
+                    <div class="flex flex-col md:flex-row gap-4 items-center mb-3">
+                        <div class="w-full md:w-3/5">
+                            <p class="font-medium text-sm sm:text-base text-slate-800">
+                                <span class="font-bold text-rose-600">Latihan 1:</span> Pak Budi ingin mengecat dinding rumahnya yang berbentuk persegi panjang dengan panjang <strong>8 meter</strong> dan tinggi <strong>3 meter</strong>. Pada dinding tersebut terdapat sebuah pintu berukuran <strong>2 meter &times; 1 meter</strong> dan sebuah jendelanya berbentuk persegi dengan sisi <strong>1 meter</strong> yang tidak dicat. Berapakah luas permukaan dinding yang harus dicat?
+                            </p>
+                        </div>
+                        <div class="w-full md:w-2/5 flex justify-center bg-white p-2 rounded-lg border border-slate-200">
+                            <!-- SVG Illustration Latihan 1 -->
+                            <svg width="150" height="80" viewBox="0 0 150 80">
+                                <rect x="5" y="5" width="140" height="70" fill="#fce7f3" stroke="#db2777" stroke-width="2"/>
+                                <!-- Pintu -->
+                                <rect x="20" y="35" width="20" height="40" fill="#ffffff" stroke="#9d174d" stroke-width="1.5"/>
+                                <text x="30" y="58" font-size="8" fill="#9d174d" text-anchor="middle">Pintu</text>
+                                <!-- Jendela -->
+                                <rect x="90" y="25" width="20" height="20" fill="#ffffff" stroke="#9d174d" stroke-width="1.5"/>
+                                <text x="100" y="38" font-size="8" fill="#9d174d" text-anchor="middle">Jendela</text>
+                                <text x="75" y="20" font-size="9" fill="#831843" text-anchor="middle" font-weight="bold">8 m &times; 3 m</text>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-4 gap-2 mb-2">
+                        <button onclick="checkGuided(1, 'A', 'B')" class="ex-btn-1 p-2.5 text-sm rounded-lg border border-slate-300 bg-white hover:bg-rose-50 hover:border-rose-400 transition font-medium text-left">A. 24 m&sup2;</button>
+                        <button onclick="checkGuided(1, 'B', 'B')" class="ex-btn-1 p-2.5 text-sm rounded-lg border border-slate-300 bg-white hover:bg-rose-50 hover:border-rose-400 transition font-medium text-left">B. 21 m&sup2;</button>
+                        <button onclick="checkGuided(1, 'C', 'B')" class="ex-btn-1 p-2.5 text-sm rounded-lg border border-slate-300 bg-white hover:bg-rose-50 hover:border-rose-400 transition font-medium text-left">C. 20 m&sup2;</button>
+                        <button onclick="checkGuided(1, 'D', 'B')" class="ex-btn-1 p-2.5 text-sm rounded-lg border border-slate-300 bg-white hover:bg-rose-50 hover:border-rose-400 transition font-medium text-left">D. 19 m&sup2;</button>
+                    </div>
+                    <div id="feedback-ex-1" class="hidden text-xs sm:text-sm font-semibold p-2 rounded-lg"></div>
+                </div>
+
+                <!-- Latihan 2 -->
+                <div class="p-4 rounded-xl bg-slate-50 border border-slate-200" id="ex-2">
+                    <div class="flex flex-col md:flex-row gap-4 items-center mb-3">
+                        <div class="w-full md:w-3/5">
+                            <p class="font-medium text-sm sm:text-base text-slate-800">
+                                <span class="font-bold text-rose-600">Latihan 2:</span> Taman berbentuk jajargenjang memiliki alas <strong>24 meter</strong> dan tinggi <strong>10 meter</strong>. Di tengah taman tersebut dibuat kolam ikan berbentuk belah ketupat dengan diagonal <strong>6 meter</strong> dan <strong>8 meter</strong>. Sisa taman yang ditanami rumput seluas...
+                            </p>
+                        </div>
+                        <div class="w-full md:w-2/5 flex justify-center bg-white p-2 rounded-lg border border-slate-200">
+                            <!-- SVG Illustration Latihan 2 -->
+                            <svg width="150" height="80" viewBox="0 0 150 80">
+                                <polygon points="20,70 50,10 130,10 100,70" fill="#fce7f3" stroke="#db2777" stroke-width="2"/>
+                                <!-- Belah ketupat di tengah -->
+                                <polygon points="75,25 90,40 75,55 60,40" fill="#ffffff" stroke="#9d174d" stroke-width="1.5"/>
+                                <text x="75" y="32" font-size="8" fill="#9d174d" text-anchor="middle">Kolam</text>
+                                <text x="75" y="78" font-size="9" fill="#831843" text-anchor="middle" font-weight="bold">Alas 24m, t = 10m</text>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-4 gap-2 mb-2">
+                        <button onclick="checkGuided(2, 'A', 'C')" class="ex-btn-2 p-2.5 text-sm rounded-lg border border-slate-300 bg-white hover:bg-rose-50 hover:border-rose-400 transition font-medium text-left">A. 240 m&sup2;</button>
+                        <button onclick="checkGuided(2, 'B', 'C')" class="ex-btn-2 p-2.5 text-sm rounded-lg border border-slate-300 bg-white hover:bg-rose-50 hover:border-rose-400 transition font-medium text-left">B. 256 m&sup2;</button>
+                        <button onclick="checkGuided(2, 'C', 'C')" class="ex-btn-2 p-2.5 text-sm rounded-lg border border-slate-300 bg-white hover:bg-rose-50 hover:border-rose-400 transition font-medium text-left">C. 216 m&sup2;</button>
+                        <button onclick="checkGuided(2, 'D', 'C')" class="ex-btn-2 p-2.5 text-sm rounded-lg border border-slate-300 bg-white hover:bg-rose-50 hover:border-rose-400 transition font-medium text-left">D. 228 m&sup2;</button>
+                    </div>
+                    <div id="feedback-ex-2" class="hidden text-xs sm:text-sm font-semibold p-2 rounded-lg"></div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-slate-900 text-slate-400 py-6 text-center text-xs sm:text-sm mt-12">
+        <p>Modul Interaktif Matematika Kelas 7 SMP &bull; Kurikulum Merdeka</p>
+        <p class="mt-1 text-slate-500">Semangat belajar matematika dengan menyenangkan!</p>
+    </footer>
+
+    <script>
+        // Logika untuk Warm-Up
+        function checkWarmup(questionNo, selectedOption, correctOption) {
+            const buttons = document.querySelectorAll(`.wu-btn-${questionNo}`);
+            const actualFeedbackEl = document.getElementById(`feedback-wu-${questionNo}`);
+
+            buttons.forEach(btn => {
+                btn.classList.remove('bg-emerald-100', 'border-emerald-500', 'bg-rose-100', 'border-rose-500', 'text-emerald-800', 'text-rose-800');
+                btn.classList.add('bg-white', 'border-slate-300');
+            });
+
+            const clickedBtn = Array.from(buttons).find(btn => btn.textContent.trim().startsWith(selectedOption));
+
+            actualFeedbackEl.classList.remove('hidden', 'bg-emerald-50', 'text-emerald-700', 'bg-rose-50', 'text-rose-700');
+
+            if (selectedOption === correctOption) {
+                if (clickedBtn) {
+                    clickedBtn.classList.remove('bg-white', 'border-slate-300');
+                    clickedBtn.classList.add('bg-emerald-100', 'border-emerald-500', 'text-emerald-800');
+                }
+                actualFeedbackEl.classList.add('bg-emerald-50', 'text-emerald-700');
+                if (questionNo === 1) actualFeedbackEl.innerHTML = `✅ <strong>Benar!</strong> Luas = 15 &times; 8 = 120 m&sup2;.`;
+                if (questionNo === 2) actualFeedbackEl.innerHTML = `✅ <strong>Hebat!</strong> Luas = &frac12; &times; 12 &times; 10 = 60 cm&sup2;.`;
+                if (questionNo === 3) actualFeedbackEl.innerHTML = `✅ <strong>Tepat sekali!</strong> Luas = &frac12; &times; (10 + 16) &times; 5 = &frac12; &times; 26 &times; 5 = 65 m&sup2;.`;
+                if (questionNo === 4) actualFeedbackEl.innerHTML = `✅ <strong>Mantap!</strong> Luas = &frac12; &times; 16 &times; 20 = 160 cm&sup2;.`;
+            } else {
+                if (clickedBtn) {
+                    clickedBtn.classList.remove('bg-white', 'border-slate-300');
+                    clickedBtn.classList.add('bg-rose-100', 'border-rose-500', 'text-rose-800');
+                }
+                actualFeedbackEl.classList.add('bg-rose-50', 'text-rose-700');
+                actualFeedbackEl.innerHTML = `❌ <strong>Kurang tepat.</strong> Coba ingat kembali rumus dasarnya atau hitung ulang dengan teliti! Jawaban yang benar adalah <strong>${correctOption}</strong>.`;
+            }
+        }
+
+        // Logika untuk Latihan Terbimbing
+        function checkGuided(questionNo, selectedOption, correctOption) {
+            const buttons = document.querySelectorAll(`.ex-btn-${questionNo}`);
+            const actualFeedbackEl = document.getElementById(`feedback-ex-${questionNo}`);
+
+            buttons.forEach(btn => {
+                btn.classList.remove('bg-rose-100', 'border-rose-500', 'bg-emerald-100', 'border-emerald-500', 'text-rose-800', 'text-emerald-800');
+                btn.classList.add('bg-white', 'border-slate-300');
+            });
+
+            const clickedBtn = Array.from(buttons).find(btn => btn.textContent.trim().startsWith(selectedOption));
+
+            actualFeedbackEl.classList.remove('hidden', 'bg-emerald-50', 'text-emerald-700', 'bg-rose-50', 'text-rose-700');
+
+            if (selectedOption === correctOption) {
+                if (clickedBtn) {
+                    clickedBtn.classList.remove('bg-white', 'border-slate-300');
+                    clickedBtn.classList.add('bg-emerald-100', 'border-emerald-500', 'text-emerald-800');
+                }
+                actualFeedbackEl.classList.add('bg-emerald-50', 'text-emerald-700');
+                if (questionNo === 1) {
+                    actualFeedbackEl.innerHTML = `🎉 <strong>Luar Biasa! Benar.</strong><br>
+                    &bull; Luas Dinding = 8 &times; 3 = 24 m&sup2;.<br>
+                    &bull; Luas Pintu = 2 &times; 1 = 2 m&sup2;.<br>
+                    &bull; Luas Jendela = 1 &times; 1 = 1 m&sup2;.<br>
+                    &bull; Luas yang dicat = 24 - (2 + 1) = 24 - 3 = 21 m&sup2;.`;
+                }
+                if (questionNo === 2) {
+                    actualFeedbackEl.innerHTML = `🎉 <strong>Hebat! Benar.</strong><br>
+                    &bull; Luas Taman (Jajargenjang) = 24 &times; 10 = 240 m&sup2;.<br>
+                    &bull; Luas Kolam (Belah Ketupat) = &frac12; &times; 6 &times; 8 = 24 m&sup2;.<br>
+                    &bull; Sisa rumput = 240 - 24 = 216 m&sup2;.`;
+                }
+            } else {
+                if (clickedBtn) {
+                    clickedBtn.classList.remove('bg-white', 'border-slate-300');
+                    clickedBtn.classList.add('bg-rose-100', 'border-rose-500', 'text-rose-800');
+                }
+                actualFeedbackEl.classList.add('bg-rose-50', 'text-rose-700');
+                actualFeedbackEl.innerHTML = `❌ <strong>Belum tepat.</strong> Coba cermati kembali proses pengurangan luas bangun utamanya. Jawaban yang benar adalah <strong>${correctOption}</strong>.`;
+            }
+        }
+    </script>
+</body>
+</html>
